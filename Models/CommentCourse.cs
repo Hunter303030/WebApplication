@@ -9,5 +9,7 @@
         public Guid? Profile_Id { get; set; }
         public Guid Course_Id { get; set; }
 
+        public Profile Profile { get; set; }
+        public Course Course { get; set; }
     }
 }
