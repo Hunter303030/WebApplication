@@ -1,20 +1,26 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title></title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />    
+    <link rel="stylesheet" href="~/css/Layout/_Layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        
-    </header>
+    <div class="menu-container">
+        <div class="menu">
+            @* <a class="btn-click menu-icon" href="#"><img src="~/Image/icon-menu.png" alt="Menu Icon" /></a> *@
+            <a class="btn-click" href="@Url.Action("AuthView","User")"><img src="~/Image/icon-entry.png" alt="Entry Icon" /><span class="menu-text">Вход / Регистрация</span></a>
+            <a class="btn-click" href="#"><img src="~/Image/icon-home.png" alt="Home Icon" /><span class="menu-text">Главная</span></a>
+        </div>        
+    </div>
+
     @RenderBody()
 
     <footer>
-        <div class="container">
+        <div class="cont">
+            
         </div>
     </footer>
+
+    <script src="~/js/menu.js"></script>
 </body>
 </html>
