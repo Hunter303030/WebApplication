@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
+using WebApplication.Repositories;
+using WebApplication.Repositories.Interfaces;
 
 namespace WebApplication
 {
@@ -17,7 +19,7 @@ namespace WebApplication
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaulConnection"));
             });
 
-            //builder.Services.AddScoped<, >();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             var app = builder.Build();            
 
@@ -30,7 +32,7 @@ namespace WebApplication
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Course}/{action=List}");
+                pattern: "{controller=Course}/{action=CourseListView}");
 
             app.Run();
         }

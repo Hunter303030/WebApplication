@@ -22,5 +22,10 @@ namespace WebApplication.Controllers
         {
             return View();
         }
+
+        public IActionResult RegisterView()
+        {
+            return View("~/Views/User/Register.cshtml");
+        }
     }
 }

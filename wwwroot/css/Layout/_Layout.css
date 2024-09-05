@@ -1,4 +1,4 @@
-﻿.menu-container {
+﻿.menu__container {
     position: fixed;
     top: 0;
     right: 0;
@@ -13,13 +13,10 @@
     border-radius: 20px 0px 0px 20px;
     height: 100%;
     width: 30px;
-    padding: 20px 10px;
-    background-color: #242524;
-    background: linear-gradient(90deg, rgba(255,255,255,0.1),rgba(255,255,255,0));
-    backdrop-filter: blur(10px);
-    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.1);
+    padding: 20px 10px;    
+    border: 1px solid #353635;
     transition: width 0.3s ease;
+    backdrop-filter: blur(50px);
     overflow: hidden;
 }
 
@@ -27,7 +24,7 @@
         width: 150px;
     }
 
-.btn-click {
+.btn__click {
     padding-bottom: 20px;
     display: flex;
     align-items: center;
@@ -39,7 +36,7 @@ img {
     height: 30px;
 }
 
-.menu-text {
+.menu__text {
     margin-left: 10px;
     color: white;
     font-size: 16px;
@@ -47,7 +44,7 @@ img {
     transition: opacity 0.3s ease;
 }
 
-.menu:hover .menu-text {
+.menu:hover .menu__text {
     opacity: 1;
 }
 
