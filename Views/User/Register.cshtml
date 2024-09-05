@@ -1,0 +1,35 @@
+﻿@model ProfileAuthDto
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Авторизация</title>
+    <link rel="stylesheet" href="~/css/User/Auth.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="form__auth">
+        <div class="cont">
+            <div class="form__data">
+                <form action="/" method="post"></form>
+                <form>
+                    <label class="title">Авторизация</label>
+                    <div class="input__box">
+                        <img class="input__icon" src="~/Image/icon-email.png" alt="Alternate Text" />
+                        <input class="input__data" asp-for=Email type="email" required />
+                        <span class="input__title">Почта</span>
+                    </div>
+                    <div class="input__box">
+                        <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
+                        <input class="input__data" asp-for=Password type="password" required />
+                        <span class="input__title">Пароль</span>
+                    </div>
+
+                    <a class="recovery__pasword" href="#" >Забыл пароль?</a>
+                    <input class="btn__auth" type="button" value="Вход" formnovalidate/>
+                    <span>Нет аккаунта?<a href="@Url.Action("RegisterView","User")">Зарегистрируйся</a></span>
+                </form>
+            </div>
+        </div>
+    </div>    
+</body>
+</html>
