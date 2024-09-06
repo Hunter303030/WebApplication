@@ -42,6 +42,25 @@ form {
     text-indent: 20px;
     outline: none;
     background-color: #353635;
+    transition: border-bottom 0.5s ease;
+    border-bottom: 2px solid transparent;
+}
+
+.red-border {
+    border-bottom: 2px solid red;
+}
+
+.yellow-border {
+    border-bottom: 2px solid yellow;
+}
+
+.green-border {
+    border-bottom: 2px solid green;
+}
+
+.btn__reg:disabled {
+    background-color: grey;
+    cursor: not-allowed;
 }
 
 .input__title {

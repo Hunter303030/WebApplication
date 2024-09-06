@@ -24,18 +24,20 @@
                     </div>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input class="input__data" type="password" required/>
+                        <input id="password" class="input__data" type="password" required />
                         <span class="input__title">Пароль</span>
                     </div>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input class="input__data" type="password" required />
+                        <input id="confirm-password" class="input__data" type="password" required />
                         <span class="input__title">Повторите пароль</span>
                     </div>
-                    <input class="btn__reg" type="submit" value="Регистрация" />
+                    <input id="submit-btn" class="btn__reg" type="submit" value="Регистрация" disabled />
                 </form>
             </div>
         </div>
     </div>
+
+    <script src="~/js/User/Register.js"></script>
 </body>
 </html>
