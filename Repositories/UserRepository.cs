@@ -1,5 +1,6 @@
 ﻿using WebApplication.Data;
 using WebApplication.Dto;
+using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 
 namespace WebApplication.Repositories
@@ -16,6 +17,11 @@ namespace WebApplication.Repositories
         public void Select(ProfileAuthDto profileAuthDto)
         {
 
+        }
+
+        public void Add(Profile profile)
+        {
+            
         }
     }
 }

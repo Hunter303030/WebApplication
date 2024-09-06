@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApplication.Dto;
+using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 
 namespace WebApplication.Controllers
@@ -26,6 +27,11 @@ namespace WebApplication.Controllers
         public IActionResult RegisterView()
         {
             return View("~/Views/User/Register.cshtml");
+        }
+
+        public IActionResult Add(Profile profile)
+        {
+            return View("~/Views/User/Auth.cshtml");
         }
     }
 }

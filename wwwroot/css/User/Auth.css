@@ -1,7 +1,7 @@
 ﻿.form__auth {
     display: flex;
     justify-content: center;
-    margin-top: 10%;
+    margin-top: 5%;
 }
 
 .form__data {
@@ -10,7 +10,6 @@
     backdrop-filter:blur(8px);
     border:1px solid #353635;
     width: 500px;
-    height: 300px;
     padding: 30px;
     border-radius:10px;
 }
