@@ -6,6 +6,6 @@ namespace WebApplication.Repositories.Interfaces
     public interface IUserRepository
     {
         public void Select(ProfileAuthDto profileAuthDto);
-        public Task Create(Profile profile);
+        public Task<bool> Create(Profile profile);
     }
 }

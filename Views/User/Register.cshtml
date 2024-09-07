@@ -32,6 +32,7 @@
                         <input id="confirm-password" class="input__data" type="password" required />
                         <span class="input__title">Повторите пароль</span>
                     </div>
+                    <span>@Html.ValidationMessage("ErrorRegister")</span>
                     <input asp-action="Register" id="submit-btn" class="btn__reg" type="submit" value="Регистрация" disabled />
                 </form>
             </div>

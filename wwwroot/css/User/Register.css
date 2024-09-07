@@ -95,3 +95,7 @@ form span, a {
     color: white;
     font-size: 16px;
 }
+
+.field-validation-error {
+    color:red;
+}

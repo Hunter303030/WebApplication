@@ -35,14 +35,24 @@ namespace WebApplication.Controllers
         {
             try
             {
-                await _userRepository.Create(profile);
-                return View("~/Views/User/Auth.cshtml");                
+                bool userCreated = await _userRepository.Create(profile);
+                if (userCreated)
+                {
+                    return View("~/Views/User/Auth.cshtml");
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом или почтой уже существует!");
+                    return View("~/Views/User/Register.cshtml", profile);
+                }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                _logger.LogWarning("LogCritical {0}", ex);
-                return View("~/Views/User/Register.cshtml");
-            }            
+                _logger.LogError(ex, "Произошла ошибка при регистрации.");
+                ModelState.AddModelError("ErrorRegister", "Произошла ошибка при регистрации.");
+                return View("~/Views/User/Register.cshtml", profile);
+            }
         }
+
     }
 }
