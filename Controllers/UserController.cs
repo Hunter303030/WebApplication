@@ -7,10 +7,12 @@ namespace WebApplication.Controllers
 {
     public class UserController : Controller
     {
+        private readonly ILogger<UserController> _logger;
         private readonly IUserRepository _userRepository;
 
-        public UserController(IUserRepository userRepository)
+        public UserController(ILogger<UserController> logger,IUserRepository userRepository)
         {
+            _logger = logger;
             _userRepository = userRepository;
         }
 
@@ -29,9 +31,18 @@ namespace WebApplication.Controllers
             return View("~/Views/User/Register.cshtml");
         }
 
-        public IActionResult Add(Profile profile)
+        public async Task<IActionResult> Register(Profile profile)
         {
-            return View("~/Views/User/Auth.cshtml");
+            try
+            {
+                await _userRepository.Create(profile);
+                return View("~/Views/User/Auth.cshtml");                
+            }
+            catch(Exception ex)
+            {
+                _logger.LogWarning("LogCritical {0}", ex);
+                return View("~/Views/User/Register.cshtml");
+            }            
         }
     }
 }

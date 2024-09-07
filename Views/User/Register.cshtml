@@ -10,21 +10,21 @@
     <div class="form__reg">
         <div class="cont">
             <div class="form__data">
-                <form>
+                <form method="post" asp-controller="User">
                     <label class="title">Регистрация</label>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
-                        <input class="input__data" type="text" required />
+                        <input asp-for=NickName class="input__data" type="text" required />
                         <span class="input__title">Псевдоним</span>
                     </div>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-email.png" alt="Alternate Text" />
-                        <input class="input__data" type="email" required />
+                        <input asp-for=Email class="input__data" type="email" required />
                         <span class="input__title">Почта</span>
                     </div>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input id="password" class="input__data" type="password" required />
+                        <input asp-for=Password id="password" class="input__data" type="password" required />
                         <span class="input__title">Пароль</span>
                     </div>
                     <div class="input__box">
@@ -32,7 +32,7 @@
                         <input id="confirm-password" class="input__data" type="password" required />
                         <span class="input__title">Повторите пароль</span>
                     </div>
-                    <input id="submit-btn" class="btn__reg" type="submit" value="Регистрация" disabled />
+                    <input asp-action="Register" id="submit-btn" class="btn__reg" type="submit" value="Регистрация" disabled />
                 </form>
             </div>
         </div>

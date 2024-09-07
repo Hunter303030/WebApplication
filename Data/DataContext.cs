@@ -10,11 +10,11 @@ namespace WebApplication.Data
             
         }
 
-        public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Course> Courses { get; set; }
-        public DbSet<CommentCourse> CommentCourses { get; set; }
-        public DbSet<Lession> Lessions { get; set; }
-        public DbSet<CommentLession> CommentLessions { get; set; }
+        public DbSet<Profile> Profile { get; set; }
+        public DbSet<Course> Course { get; set; }
+        public DbSet<CommentCourse> CommentCourse { get; set; }
+        public DbSet<Lession> Lession { get; set; }
+        public DbSet<CommentLession> CommentLession { get; set; }
 
         //protected override void OnConfiguring(ModelBuilder modelBuilder)
         //{

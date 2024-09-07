@@ -15,7 +15,7 @@ namespace WebApplication.Repositories
 
         public IEnumerable<Course> List()
         {
-            IEnumerable<Course> coursesList = _context.Courses.ToList();
+            IEnumerable<Course> coursesList = _context.Course.ToList();
             return coursesList;
         }
     }
