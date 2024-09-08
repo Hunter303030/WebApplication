@@ -33,26 +33,26 @@ namespace WebApplication.Controllers
             {                
                 var userSelect = await _userRepository.Select(profileAuthDto);
                 if (userSelect != null)
-                {                    
-                    //var claims = new List<Claim>
-                    //{
-                    //new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userSelect.Id)),
-                    //new Claim(ClaimTypes.Name, userSelect.NickName),
-                    //new Claim(ClaimTypes.Role, userSelect.Role.Title)
-                    //};                    
-                    //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                {
+                    var claims = new List<Claim>
+                    {
+                    new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userSelect.Id)),
+                    new Claim(ClaimTypes.Name, userSelect.NickName),
+                    new Claim(ClaimTypes.Role, userSelect.Role.Title),
+                    new Claim("ImageUrl",userSelect.ImageUrl)
+                    };
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                    //var authProperties = new AuthenticationProperties
-                    //{
-                    //    IsPersistent = true, // Пользователь будет оставаться авторизованным между сеансами
-                    //    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2) // Время действия куки
-                    //};
-
-                    //// Аутентифицируем пользователя с клаймами
-                    //await HttpContext.SignInAsync(
-                    //    CookieAuthenticationDefaults.AuthenticationScheme,
-                    //    new ClaimsPrincipal(claimsIdentity),
-                    //    authProperties);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
+                    };
+                    
+                    await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        new ClaimsPrincipal(claimsIdentity),
+                        authProperties);
                     return RedirectToAction("List", "Course");
                 }
                 else
@@ -85,7 +85,7 @@ namespace WebApplication.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом или почтой уже существует!");
+                    ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом, телефоно или почтой уже существует!");
                     return View("~/Views/User/Register.cshtml", profile);
                 }
             }

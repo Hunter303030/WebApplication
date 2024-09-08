@@ -36,9 +36,9 @@ namespace WebApplication.Repositories
         {
             Random random = new Random();
             PasswordService service = new PasswordService();
-            var avatars = new[] { "/images/avatar-1.png", "/images/avatar-2.png", "/images/avatar-3.png" };
+            var avatars = new[] { "/Images/avatar-1.png", "/Images/avatar-2.png", "/Images/avatar-3.png" };
             
-            bool userExists = await _context.Profile.AnyAsync(x => x.NickName == profile.NickName || x.Email == profile.Email);
+            bool userExists = await _context.Profile.AnyAsync(x => x.NickName == profile.NickName || x.Email == profile.Email || x.Phone == profile.Phone);
 
             if (!userExists)
             {
