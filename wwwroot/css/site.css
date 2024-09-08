@@ -9,3 +9,7 @@ body {
     max-width: 1000px;
     margin: 0 auto;
 }
+
+.field-validation-error {
+    color: red;
+}

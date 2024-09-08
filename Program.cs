@@ -32,7 +32,7 @@ namespace WebApplication
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Course}/{action=CourseListView}");
+                pattern: "{controller=Course}/{action=List}");
 
             app.Run();
         }

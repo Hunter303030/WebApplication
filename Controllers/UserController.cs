@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
+using System.Security.Claims;
 using WebApplication.Dto;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WebApplication.Controllers
 {
@@ -10,7 +16,7 @@ namespace WebApplication.Controllers
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepository _userRepository;
 
-        public UserController(ILogger<UserController> logger,IUserRepository userRepository)
+        public UserController(ILogger<UserController> logger, IUserRepository userRepository)
         {
             _logger = logger;
             _userRepository = userRepository;
@@ -21,9 +27,46 @@ namespace WebApplication.Controllers
             return View("~/Views/User/Auth.cshtml");
         }
 
-        public IActionResult Auth(ProfileAuthDto profileAuthDto)
+        public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
-            return View();
+            try
+            {                
+                var userSelect = await _userRepository.Select(profileAuthDto);
+                if (userSelect != null)
+                {                    
+                    //var claims = new List<Claim>
+                    //{
+                    //new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userSelect.Id)),
+                    //new Claim(ClaimTypes.Name, userSelect.NickName),
+                    //new Claim(ClaimTypes.Role, userSelect.Role.Title)
+                    //};                    
+                    //var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    //var authProperties = new AuthenticationProperties
+                    //{
+                    //    IsPersistent = true, // Пользователь будет оставаться авторизованным между сеансами
+                    //    ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2) // Время действия куки
+                    //};
+
+                    //// Аутентифицируем пользователя с клаймами
+                    //await HttpContext.SignInAsync(
+                    //    CookieAuthenticationDefaults.AuthenticationScheme,
+                    //    new ClaimsPrincipal(claimsIdentity),
+                    //    authProperties);
+                    return RedirectToAction("List", "Course");
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorAuth", "Неверная почта или пароль!");
+                    return View("~/Views/User/Auth.cshtml", profileAuthDto);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка при авторизации!");
+                ModelState.AddModelError("ErrorAuth", "Произошла ошибка при авторизации!");
+                return View("~/Views/User/Auth.cshtml", profileAuthDto);
+            }
         }
 
         public IActionResult RegisterView()
@@ -48,8 +91,8 @@ namespace WebApplication.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Произошла ошибка при регистрации.");
-                ModelState.AddModelError("ErrorRegister", "Произошла ошибка при регистрации.");
+                _logger.LogError(ex, "Произошла ошибка при регистрации!");
+                ModelState.AddModelError("ErrorRegister", "Произошла ошибка при регистрации!");
                 return View("~/Views/User/Register.cshtml", profile);
             }
         }

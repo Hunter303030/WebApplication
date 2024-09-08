@@ -5,6 +5,8 @@
     <title>Регистрация</title>
     <link rel="stylesheet" href="~/css/User/Register.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
 <body>
     <div class="form__reg">
@@ -23,6 +25,11 @@
                         <span class="input__title">Почта</span>
                     </div>
                     <div class="input__box">
+                        <img class="input__icon" src="~/Image/icon-telephone.png" alt="Alternate Text" />
+                        <input asp-for="Phone" id="phone-input" class="input__data" type="text" value="+7 " required placeholder="+7 (___) ___-__-__" />
+                        <span class="input__title">Телефон</span>
+                    </div>
+                    <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
                         <input asp-for=Password id="password" class="input__data" type="password" required />
                         <span class="input__title">Пароль</span>
@@ -38,7 +45,6 @@
             </div>
         </div>
     </div>
-
     <script src="~/js/User/Register.js"></script>
 </body>
 </html>

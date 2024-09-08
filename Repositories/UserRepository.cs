@@ -16,9 +16,20 @@ namespace WebApplication.Repositories
             _context = context;
         }
 
-        public void Select(ProfileAuthDto profileAuthDto)
-        {
+        public async Task<Profile?> Select(ProfileAuthDto profileAuthDto)
+        {            
+            PasswordService service = new PasswordService();
 
+            var userSelect = await _context.Profile.Where(x => x.Email == profileAuthDto.Email).Include(x=>x.Role).FirstOrDefaultAsync();
+
+            if (userSelect != null && service.Verify(profileAuthDto.Password, userSelect.Password))
+            {
+                return userSelect;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<bool> Create(Profile profile)
@@ -37,6 +48,7 @@ namespace WebApplication.Repositories
                     NickName = profile.NickName,
                     Email = profile.Email,
                     Password = service.Hash(profile.Password),
+                    Phone = profile.Phone,
                     DateCreate = DateTime.Now,
                     ImageUrl = avatars[random.Next(avatars.Length)],
                     Role_Id = 3

@@ -10,5 +10,7 @@
         public DateTime DateCreate { get; set; }
         public string ImageUrl { get; set; }
         public int Role_Id { get; set; }
+
+        public Role Role { get; set; }
     }
 }

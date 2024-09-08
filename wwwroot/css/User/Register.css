@@ -89,13 +89,14 @@ form {
     font-size: 14px;
     outline: none;
     margin: 10px 0;
+    transition: background-color linear 0.1s;
+}
+
+.btn__reg:hover{
+    background-color:silver;
 }
 
 form span, a {
     color: white;
     font-size: 16px;
-}
-
-.field-validation-error {
-    color:red;
 }

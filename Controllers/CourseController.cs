@@ -13,7 +13,7 @@ namespace WebApplication.Controllers
             _logger = logger;
         }
 
-        public IActionResult CourseListView()
+        public IActionResult List()
         {
             return View("~/Views/Course/List.cshtml");
         }              

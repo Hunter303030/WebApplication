@@ -42,3 +42,7 @@ function checkPassword() {
 
     submitBtn.disabled = !passwordValid;
 }
+
+$(document).ready(function () {
+    $('#phone-input').mask('+7 (000) 000-00-00');
+});
