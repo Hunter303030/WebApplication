@@ -7,7 +7,9 @@
         public string Discription { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateUpdata { get; set; }
-        
+        public string PreviewUrl { get; set; }
+        public Guid Profile_Id { get; set; }
+
         public Profile Profile { get; set; }
     }
 }
