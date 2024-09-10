@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using System.Security.Claims;
-using WebApplication.Dto;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using WebApplication.Dto.User;
 
 namespace WebApplication.Controllers
 {
@@ -97,5 +97,18 @@ namespace WebApplication.Controllers
             }
         }
 
+
+        public async Task<IActionResult> EditView(Guid user_id)
+        {
+            try
+            {
+                var userEdit = await _userRepository.GetProfile(user_id);
+                return View("~/Views/User/Edit.cshtml", userEdit);
+            }
+            catch(Exception ex)
+            {
+                return View("~/Views/Sharer/Error.cshtml",ex);
+            }
+        }
     }
 }

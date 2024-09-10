@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <link rel="stylesheet" href="~/css/Layout/_Layout.css" asp-append-version="true" />
@@ -7,12 +8,13 @@
 <body>
     @{
         var imageUrlClaim = User.FindFirst("ImageUrl")?.Value ?? Url.Content("~/Image/avatar-1.png");
+        var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
     <div class="menu__container">
         <div class="menu">
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="btn__click" href="@Url.Action("","")"><img style="border-radius:50%" src="@imageUrlClaim" alt="Entry Icon" /><span class="menu__text">@User.Identity.Name</span></a>
+                <a class="btn__click" href="@Url.Action("EditView","User", new {user_id = userid})"><img style="border-radius:50%" src="@imageUrlClaim" alt="Entry Icon" /><span class="menu__text">@User.Identity.Name</span></a>
             }
             else
             {

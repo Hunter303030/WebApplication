@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
-using WebApplication.Dto;
+using WebApplication.Dto.User;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service;
@@ -62,6 +62,15 @@ namespace WebApplication.Repositories
             return false;
         }
 
+        public async Task<Profile> GetProfile(Guid user_id)
+        {
+            var userEdit = await _context.Profile.Where(x => x.Id == user_id).FirstOrDefaultAsync();
+            if(userEdit != null)
+            {
+                return userEdit;
+            }
+            return null;
+        }
     }
 }
 
