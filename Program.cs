@@ -26,13 +26,13 @@ namespace WebApplication
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/User/Auth";
+                    options.LoginPath = "/Profile/Auth";
                 });
 
             builder.Services.AddAutoMapper(typeof(Program));
 
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<IProfileService, ProfileService>();
 
             var app = builder.Build();
 

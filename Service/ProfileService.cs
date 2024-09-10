@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using WebApplication.Dto.User;
+using WebApplication.Dto.Profile;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Service
 {
-    public class UserService: IUserService
+    public class ProfileService: IProfileService
     {
         private readonly IMapper _mapper;
-        private readonly IUserRepository _userRepository;
+        private readonly IProfileRepository _userRepository;
 
-        public UserService(IMapper mapper, IUserRepository userRepository)
+        public ProfileService(IMapper mapper, IProfileRepository userRepository)
         {
             _mapper = mapper;
             _userRepository = userRepository;

@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
-using WebApplication.Dto.User;
+using WebApplication.Dto.Profile;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service;
 
 namespace WebApplication.Repositories
 {
-    public class UserRepository :IUserRepository
+    public class ProfileRepository :IProfileRepository
     {
         private readonly DataContext _context;
 
-        public UserRepository(DataContext context)
+        public ProfileRepository(DataContext context)
         {
             _context = context;
         }

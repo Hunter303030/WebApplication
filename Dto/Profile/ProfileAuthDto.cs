@@ -1,4 +1,4 @@
-﻿namespace WebApplication.Dto.User
+﻿namespace WebApplication.Dto.Profile
 {
     public class ProfileAuthDto
     {

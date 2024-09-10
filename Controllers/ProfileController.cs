@@ -2,47 +2,47 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebApplication.Dto.User;
+using WebApplication.Dto.Profile;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Controllers
 {
-    public class UserController : Controller
+    public class ProfileController : Controller
     {
-        private readonly ILogger<UserController> _logger;
-        private readonly IUserRepository _userRepository;
-        private readonly IUserService _userService;
+        private readonly ILogger<ProfileController> _logger;
+        private readonly IProfileRepository _profileRepository;
+        private readonly IProfileService _profileService;
 
-        public UserController(
-                                ILogger<UserController> logger,
-                                IUserRepository userRepository,
-                                IUserService userService)
+        public ProfileController(
+                                ILogger<ProfileController> logger,
+                                IProfileRepository profileRepository,
+                                IProfileService profileService)
         {
             _logger = logger;
-            _userRepository = userRepository;
-            _userService = userService;
+            _profileRepository = profileRepository;
+            _profileService = profileService;
         }
 
         public IActionResult AuthView()
         {
-            return View("~/Views/User/Auth.cshtml");
+            return View("~/Views/profile/Auth.cshtml");
         }
 
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
             try
             {
-                var userSelect = await _userRepository.Select(profileAuthDto);
-                if (userSelect != null)
+                var profileSelect = await _profileRepository.Select(profileAuthDto);
+                if (profileSelect != null)
                 {
                     var claims = new List<Claim>
                     {
-                    new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userSelect.Id)),
-                    new Claim(ClaimTypes.Name, userSelect.NickName),
-                    new Claim(ClaimTypes.Role, userSelect.Role.Title),
-                    new Claim("ImageUrl",userSelect.ImageUrl)
+                    new Claim(ClaimTypes.NameIdentifier, Convert.ToString(profileSelect.Id)),
+                    new Claim(ClaimTypes.Name, profileSelect.NickName),
+                    new Claim(ClaimTypes.Role, profileSelect.Role.Title),
+                    new Claim("ImageUrl",profileSelect.ImageUrl)
                     };
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -61,52 +61,52 @@ namespace WebApplication.Controllers
                 else
                 {
                     ModelState.AddModelError("ErrorAuth", "Неверная почта или пароль!");
-                    return View("~/Views/User/Auth.cshtml", profileAuthDto);
+                    return View("~/Views/profile/Auth.cshtml", profileAuthDto);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Произошла ошибка при авторизации!");
                 ModelState.AddModelError("ErrorAuth", "Произошла ошибка при авторизации!");
-                return View("~/Views/User/Auth.cshtml", profileAuthDto);
+                return View("~/Views/profile/Auth.cshtml", profileAuthDto);
             }
         }
 
         public IActionResult RegisterView()
         {
-            return View("~/Views/User/Register.cshtml");
+            return View("~/Views/profile/Register.cshtml");
         }
 
         public async Task<IActionResult> Register(Profile profile)
         {
             try
             {
-                bool userCreated = await _userRepository.Create(profile);
-                if (userCreated)
+                bool profileCreated = await _profileRepository.Create(profile);
+                if (profileCreated)
                 {
-                    return View("~/Views/User/Auth.cshtml");
+                    return View("~/Views/profile/Auth.cshtml");
                 }
                 else
                 {
                     ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом, телефоно или почтой уже существует!");
-                    return View("~/Views/User/Register.cshtml", profile);
+                    return View("~/Views/profile/Register.cshtml", profile);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Произошла ошибка при регистрации!");
                 ModelState.AddModelError("ErrorRegister", "Произошла ошибка при регистрации!");
-                return View("~/Views/User/Register.cshtml", profile);
+                return View("~/Views/profile/Register.cshtml", profile);
             }
         }
 
 
-        public async Task<IActionResult> EditView(Guid user_id)
+        public async Task<IActionResult> EditView(Guid profile_id)
         {
             try
             {
-                var userEdit = await _userRepository.GetProfile(user_id);
-                return View("~/Views/User/Edit.cshtml", userEdit);
+                var profileEdit = await _profileRepository.GetProfile(profile_id);
+                return View("~/Views/profile/Edit.cshtml", profileEdit);
             }
             catch (Exception ex)
             {

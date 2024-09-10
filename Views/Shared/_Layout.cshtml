@@ -8,17 +8,17 @@
 <body>
     @{
         var imageUrlClaim = User.FindFirst("ImageUrl")?.Value ?? Url.Content("~/Image/avatar-1.png");
-        var userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var profileid = User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
     <div class="menu__container">
         <div class="menu">
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="btn__click" href="@Url.Action("EditView","User", new {user_id = userid})"><img style="border-radius:50%" src="@imageUrlClaim" alt="Entry Icon" /><span class="menu__text">@User.Identity.Name</span></a>
+                <a class="btn__click" href="@Url.Action("EditView","Profile", new {profile_id = profileid})"><img style="border-radius:50%" src="@imageUrlClaim" alt="Entry Icon" /><span class="menu__text">@User.Identity.Name</span></a>
             }
             else
             {
-                <a class="btn__click" href="@Url.Action("AuthView","User")"><img src="~/Image/icon-entry.png" alt="Entry Icon" /><span class="menu__text">Вход</span></a>
+                <a class="btn__click" href="@Url.Action("AuthView","Profile")"><img src="~/Image/icon-entry.png" alt="Entry Icon" /><span class="menu__text">Вход</span></a>
             }
             <a class="btn__click" href="@Url.Action("List","Course")"><img src="~/Image/icon-home.png" alt="Home Icon" /><span class="menu__text">Главная</span></a>
             @* <a class="btn-click menu-icon" href="#"><img src="~/Image/icon-menu.png" alt="Menu Icon" /></a>                 *@
