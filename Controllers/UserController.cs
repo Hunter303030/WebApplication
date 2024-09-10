@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
+using WebApplication.Dto.User;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using WebApplication.Dto.User;
+using WebApplication.Service.Interfase;
 
 namespace WebApplication.Controllers
 {
@@ -15,11 +13,16 @@ namespace WebApplication.Controllers
     {
         private readonly ILogger<UserController> _logger;
         private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
-        public UserController(ILogger<UserController> logger, IUserRepository userRepository)
+        public UserController(
+                                ILogger<UserController> logger,
+                                IUserRepository userRepository,
+                                IUserService userService)
         {
             _logger = logger;
             _userRepository = userRepository;
+            _userService = userService;
         }
 
         public IActionResult AuthView()
@@ -30,7 +33,7 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
             try
-            {                
+            {
                 var userSelect = await _userRepository.Select(profileAuthDto);
                 if (userSelect != null)
                 {
@@ -48,7 +51,7 @@ namespace WebApplication.Controllers
                         IsPersistent = true,
                         ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
                     };
-                    
+
                     await HttpContext.SignInAsync(
                         CookieAuthenticationDefaults.AuthenticationScheme,
                         new ClaimsPrincipal(claimsIdentity),
@@ -105,9 +108,9 @@ namespace WebApplication.Controllers
                 var userEdit = await _userRepository.GetProfile(user_id);
                 return View("~/Views/User/Edit.cshtml", userEdit);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return View("~/Views/Sharer/Error.cshtml",ex);
+                return View("~/Views/Sharer/Error.cshtml", ex);
             }
         }
     }

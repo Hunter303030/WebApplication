@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
 using WebApplication.Repositories;
 using WebApplication.Repositories.Interfaces;
+using WebApplication.Service;
+using WebApplication.Service.Interfase;
 
 namespace WebApplication
 {
@@ -27,10 +29,12 @@ namespace WebApplication
                     options.LoginPath = "/User/Auth";
                 });
 
+            builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
 
-            var app = builder.Build();            
+            var app = builder.Build();
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
