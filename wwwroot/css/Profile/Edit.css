@@ -1,7 +1,7 @@
 ﻿.form__edit {
     display: flex;
     justify-content: center;
-    margin-top: 5%;
+    margin-top: 10px;
 }
 
 .form__data {
@@ -95,4 +95,58 @@ form {
 form span, a {
     color: white;
     font-size: 16px;
+}
+
+.preview {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+    display: block;
+}
+
+.input__box {
+    margin-top: 20px;
+}
+
+.file-input {
+    display: none;
+}
+
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #353635;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+    .custom-file-upload:hover {
+        background-color: #4b4b4b;
+    }
+
+#file-name {
+    margin-left: 10px;
+    color: white;
+}
+
+#resetAvatar {
+    display: inline-block;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #353635;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#resetAvatar:hover {
+    background-color: #4b4b4b;
 }

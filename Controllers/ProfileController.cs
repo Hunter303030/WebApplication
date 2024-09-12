@@ -105,12 +105,13 @@ namespace WebApplication.Controllers
         {
             try
             {
-                var profileEdit = await _profileRepository.GetProfile(profile_id);
+                var profileEdit = await _profileService.GetProfile(profile_id);
                 return View("~/Views/profile/Edit.cshtml", profileEdit);
             }
             catch (Exception ex)
             {
-                return View("~/Views/Sharer/Error.cshtml", ex);
+                _logger.LogError(ex, "Произошла ошибка при вызове формы редактирования!");
+                return RedirectToAction("List", "Course");
             }
         }
     }

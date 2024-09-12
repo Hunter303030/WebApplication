@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication.Data;
+using WebApplication.Mappings;
 using WebApplication.Repositories;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service;
@@ -29,7 +30,7 @@ namespace WebApplication
                     options.LoginPath = "/Profile/Auth";
                 });
 
-            builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
