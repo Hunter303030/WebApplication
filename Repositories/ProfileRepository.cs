@@ -7,7 +7,7 @@ using WebApplication.Service;
 
 namespace WebApplication.Repositories
 {
-    public class ProfileRepository :IProfileRepository
+    public class ProfileRepository : IProfileRepository
     {
         private readonly DataContext _context;
 
@@ -17,19 +17,16 @@ namespace WebApplication.Repositories
         }
 
         public async Task<Profile?> Select(ProfileAuthDto profileAuthDto)
-        {            
+        {
             PasswordService service = new PasswordService();
 
-            var userSelect = await _context.Profile.Where(x => x.Email == profileAuthDto.Email).Include(x=>x.Role).FirstOrDefaultAsync();
+            var userSelect = await _context.Profile.Where(x => x.Email == profileAuthDto.Email).Include(x => x.Role).FirstOrDefaultAsync();
 
             if (userSelect != null && service.Verify(profileAuthDto.Password, userSelect.Password))
             {
                 return userSelect;
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
 
         public async Task<bool> Create(Profile profile)
@@ -37,7 +34,7 @@ namespace WebApplication.Repositories
             Random random = new Random();
             PasswordService service = new PasswordService();
             var avatars = new[] { "/Images/avatar-1.png", "/Images/avatar-2.png", "/Images/avatar-3.png" };
-            
+
             bool userExists = await _context.Profile.AnyAsync(x => x.NickName == profile.NickName || x.Email == profile.Email || x.Phone == profile.Phone);
 
             if (!userExists)
@@ -53,7 +50,7 @@ namespace WebApplication.Repositories
                     ImageUrl = avatars[random.Next(avatars.Length)],
                     Role_Id = 3
                 };
-                
+
                 await _context.Profile.AddAsync(newProfile);
                 await _context.SaveChangesAsync();
 
@@ -65,11 +62,29 @@ namespace WebApplication.Repositories
         public async Task<Profile> GetProfile(Guid user_id)
         {
             var userEdit = await _context.Profile.Where(x => x.Id == user_id).FirstOrDefaultAsync();
-            if(userEdit != null)
+            if (userEdit != null)
             {
                 return userEdit;
             }
             return null;
+        }
+
+        public async Task<bool> Edit(Profile profile)
+        {
+            if (profile != null)
+            {
+                bool profileEmail = await _context.Profile.AnyAsync(x=>x.NickName == profile.Email);
+                bool profileNickName = await _context.Profile.AnyAsync(x=>x.NickName == profile.NickName);
+                bool profilePhone = await _context.Profile.AnyAsync(x=>x.NickName == profile.Phone);
+
+                if(profileEmail == false && profileNickName == false && profilePhone == false)
+                {
+                    _context.Profile.Update(profile);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }                
+            }
+            return false;
         }
     }
 }

@@ -12,7 +12,7 @@
     <div class="form__edit">
         <div class="cont">
             <div class="form__data">
-                <form method="post" asp-controller="User">
+                <form method="post" asp-controller="Profile" enctype="multipart/form-data">
                     <label class="title">Редактировать</label>
                     <div class="input__box">
                         <img class="input__icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
@@ -29,12 +29,13 @@
                         <input asp-for="@Model.Phone" id="phone-input" class="input__data" type="text" required placeholder="+7 (___) ___-__-__" />
                         <span class="input__title">Телефон</span>
                     </div>                                  
-                    <img id="current-avatar" class="preview" src="@Url.Content(Model.ImageUrl)" alt="Аватарка по умолчанию" />
+                    <img id="current-avatar" class="preview" src="@Url.Content(@Model.ImageUrl)" alt="Аватарка по умолчанию" />
                     <div class="input__box">
                         <label for="fileInput" class="custom-file-upload">
                             Выберите файл
                         </label>    
-                        <input type="file" id="fileInput" class="file-input" accept="image/*">
+                        <input asp-for=@Model.ImageUrl type="hidden"/>
+                        <input asp-for=Avatar type="file" id="fileInput" class="file-input" accept="image/*">
                         <label id="file-name">Файл не выбран</label>
                     </div>
                     <div class="input__box">

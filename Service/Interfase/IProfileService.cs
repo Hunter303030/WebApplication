@@ -1,9 +1,11 @@
-﻿using WebApplication.Dto.Profile;
+﻿using AutoMapper;
+using WebApplication.Dto.Profile;
 
 namespace WebApplication.Service.Interfase
 {
     public interface IProfileService
     {
         public Task<ProfileEditDto> GetProfile(Guid Id);
+        public Task<bool> Edit(ProfileEditDto profileEditDto, Guid profile_Id);
     }
 }

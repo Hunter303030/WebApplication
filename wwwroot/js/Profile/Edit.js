@@ -7,37 +7,31 @@ document.getElementById('fileInput').addEventListener('change', function () {
     document.getElementById('file-name').textContent = fileName;
 });
 
-// Получение элементов
 const fileInput = document.getElementById('fileInput');
 const fileNameLabel = document.getElementById('file-name');
 const currentAvatar = document.getElementById('current-avatar');
 const resetAvatarButton = document.getElementById('resetAvatar');
 
-// Сохраняем исходное изображение
 let originalAvatarSrc = currentAvatar.src;
 
-// Обработчик выбора файла
 fileInput.addEventListener('change', function () {
     const file = this.files[0];
 
-    // Если выбран файл
     if (file) {
         fileNameLabel.textContent = file.name;
 
-        // Создание объекта URL для предварительного просмотра изображения
         const reader = new FileReader();
         reader.onload = function (e) {
-            currentAvatar.src = e.target.result; // Меняем источник изображения
+            currentAvatar.src = e.target.result;
         };
-        reader.readAsDataURL(file); // Читаем файл как URL
+        reader.readAsDataURL(file);
     } else {
         fileNameLabel.textContent = "Файл не выбран";
     }
 });
 
-// Обработчик кнопки сброса аватарки
 resetAvatarButton.addEventListener('click', function () {
-    currentAvatar.src = originalAvatarSrc; // Возвращаем исходную аватарку
-    fileInput.value = ''; // Очищаем выбор файла
-    fileNameLabel.textContent = "Файл не выбран"; // Возвращаем текст
+    currentAvatar.src = originalAvatarSrc;
+    fileInput.value = '';
+    fileNameLabel.textContent = "Файл не выбран";
 });

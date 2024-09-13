@@ -8,5 +8,6 @@ namespace WebApplication.Repositories.Interfaces
         public Task<Profile?> Select(ProfileAuthDto profileAuthDto);
         public Task<bool> Create(Profile profile);
         public Task<Profile> GetProfile(Guid user_id);
+        public Task<bool> Edit(Profile profile);
     }
 }

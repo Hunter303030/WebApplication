@@ -14,15 +14,18 @@ namespace WebApplication.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileRepository _profileRepository;
         private readonly IProfileService _profileService;
+        private readonly IWebHostEnvironment _appEnvironment;
 
         public ProfileController(
                                 ILogger<ProfileController> logger,
                                 IProfileRepository profileRepository,
-                                IProfileService profileService)
+                                IProfileService profileService,
+                                IWebHostEnvironment appEnvironment)
         {
             _logger = logger;
             _profileRepository = profileRepository;
             _profileService = profileService;
+            _appEnvironment = appEnvironment;
         }
 
         public IActionResult AuthView()
@@ -101,11 +104,12 @@ namespace WebApplication.Controllers
         }
 
 
-        public async Task<IActionResult> EditView(Guid profile_id)
+        public async Task<IActionResult> EditView()
         {
             try
             {
-                var profileEdit = await _profileService.GetProfile(profile_id);
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var profileEdit = await _profileService.GetProfile(Guid.Parse(userId));
                 return View("~/Views/profile/Edit.cshtml", profileEdit);
             }
             catch (Exception ex)
@@ -113,6 +117,59 @@ namespace WebApplication.Controllers
                 _logger.LogError(ex, "Произошла ошибка при вызове формы редактирования!");
                 return RedirectToAction("List", "Course");
             }
+        }
+
+        public async Task<IActionResult> Edit(ProfileEditDto profileEdit)
+        {
+            try
+            {
+                if (profileEdit.Avatar != null)
+                {
+                    string folderPath = Path.Combine(_appEnvironment.WebRootPath, "Avatar");
+
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(profileEdit.Avatar.FileName);
+                    string filePath = Path.Combine(folderPath, fileName);
+
+                    using (var fileStream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await profileEdit.Avatar.CopyToAsync(fileStream);
+                    }
+                    profileEdit.ImageUrl = "/Avatar/" + fileName;
+                }
+
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                bool cheach = await _profileService.Edit(profileEdit, Guid.Parse(userId));
+
+                if(cheach == true)
+                {
+                    var claims = new List<Claim>
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userId)),
+                        new Claim(ClaimTypes.Name, profileEdit.NickName),
+                        new Claim("ImageUrl",profileEdit.ImageUrl)
+                    };
+
+                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    var authProperties = new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
+                    };
+                
+                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                }
+                else
+                {
+                    ModelState.AddModelError("ErrorEdit", "Данные уже заняты!");
+                }
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Произошла ошибка при редактирования!");
+            }
+            return View("~/Views/profile/Edit.cshtml", profileEdit);
         }
     }
 }
