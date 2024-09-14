@@ -34,6 +34,7 @@ namespace WebApplication
 
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
             builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<IPasswordService, PasswordService>();
 
             var app = builder.Build();
 

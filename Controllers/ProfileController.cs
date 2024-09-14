@@ -140,7 +140,7 @@ namespace WebApplication.Controllers
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 bool cheach = await _profileService.Edit(profileEdit, Guid.Parse(userId));
 
-                if(cheach == true)
+                if (cheach)
                 {
                     var claims = new List<Claim>
                     {
@@ -155,7 +155,7 @@ namespace WebApplication.Controllers
                         IsPersistent = true,
                         ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
                     };
-                
+
                     await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
                 }
@@ -167,9 +167,42 @@ namespace WebApplication.Controllers
             }
             catch (Exception ex)
             {
+                ModelState.AddModelError("ErrorEdit", "Произошла ошибка при редактировании!");
                 _logger.LogError(ex, "Произошла ошибка при редактирования!");
             }
             return View("~/Views/profile/Edit.cshtml", profileEdit);
+        }
+
+        public IActionResult EditPasswordView()
+        {
+            return View("~/Views/Profile/EditPassword.cshtml");
+        }
+
+        public async Task<IActionResult> EditPassword(ProfileEditPasswordDto profileEditPasswordDto)
+        {
+            try
+            {
+                if(profileEditPasswordDto != null)
+                {
+                    var profile_Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    bool cheak = await _profileService.EditPassword(profileEditPasswordDto, Guid.Parse(profile_Id));
+
+                    if (cheak)
+                    {
+                        return await EditView();
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка во время изменения пароля!");
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка во время изменения пароля!");
+                _logger.LogError(ex, "Произошла ошибка во время изменения пароля!");
+            }
+            return View("~/Views/Profile/EditPassword.cshtml");
         }
     }
 }

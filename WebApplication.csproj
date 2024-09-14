@@ -10,15 +10,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\AvatarProfile\**" />
+    <Content Remove="wwwroot\AvatarProfile\**" />
+    <EmbeddedResource Remove="wwwroot\AvatarProfile\**" />
+    <None Remove="wwwroot\AvatarProfile\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Azure.Identity" Version="1.10.3" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.21.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\AvatarProfile\" />
   </ItemGroup>
 
 </Project>

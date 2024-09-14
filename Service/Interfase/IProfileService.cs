@@ -7,5 +7,6 @@ namespace WebApplication.Service.Interfase
     {
         public Task<ProfileEditDto> GetProfile(Guid Id);
         public Task<bool> Edit(ProfileEditDto profileEditDto, Guid profile_Id);
+        public Task<bool> EditPassword(ProfileEditPasswordDto profileEditDto, Guid profile_Id);
     }
 }

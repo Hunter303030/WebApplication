@@ -1,6 +1,8 @@
-﻿namespace WebApplication.Service
+﻿using WebApplication.Service.Interfase;
+
+namespace WebApplication.Service
 {
-    public class PasswordService
+    public class PasswordService:IPasswordService
     {
         public string Hash(string password)
         {

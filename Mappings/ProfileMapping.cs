@@ -10,9 +10,11 @@ namespace WebApplication.Mappings
         {
             CreateMap<Models.Profile, ProfileAuthDto>();
             CreateMap<Models.Profile, ProfileEditDto>();
+            CreateMap<ProfileEditPasswordDto, Models.Profile>();
 
             CreateMap<ProfileAuthDto, Models.Profile>();
             CreateMap<ProfileEditDto, Models.Profile>();
+            CreateMap<ProfileEditPasswordDto, Models.Profile>();
         }
     }
 }

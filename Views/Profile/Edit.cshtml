@@ -43,7 +43,7 @@
                     </div>
 
                     <span>@Html.ValidationMessage("ErrorEdit")</span>
-                    <a class="change__pasword" href="#">Изменить пароль</a>
+                    <a class="change__pasword" href="@Url.Action("EditPasswordView","Profile")">Изменить пароль</a>
                     <input asp-action="Edit" class="btn__edit" type="submit" value="Сохранить" />
                 </form>
             </div>

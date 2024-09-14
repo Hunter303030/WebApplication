@@ -42,5 +42,19 @@ namespace WebApplication.Service
             }
             return false;
         }
+
+        public async Task<bool> EditPassword(ProfileEditPasswordDto profileEditDto, Guid profile_Id)
+        {
+            if(profileEditDto != null && profile_Id != Guid.Empty)
+            {
+                bool cheak = await _profileRepository.EditPassword(profile_Id, profileEditDto);
+
+                if (cheak)
+                    return true;
+                else
+                    return false;
+            }
+            return false;
+        }
     }
 }
