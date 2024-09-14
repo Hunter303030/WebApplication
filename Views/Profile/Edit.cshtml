@@ -9,28 +9,28 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
 <body>
-    <div class="form__edit">
+    <div class="form-edit">
         <div class="cont">
-            <div class="form__data">
+            <div class="form-data">
                 <form method="post" asp-controller="Profile" enctype="multipart/form-data">
                     <label class="title">Редактировать</label>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
-                        <input asp-for=@Model.NickName class="input__data" type="text" required />
-                        <span class="input__title">Псевдоним</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
+                        <input asp-for=@Model.NickName class="input-data" type="text" required />
+                        <span class="input-title">Псевдоним</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-email.png" alt="Alternate Text" />
-                        <input asp-for=@Model.Email class="input__data" type="email" required />
-                        <span class="input__title">Почта</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-email.png" alt="Alternate Text" />
+                        <input asp-for=@Model.Email class="input-data" type="email" required />
+                        <span class="input-title">Почта</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-telephone.png" alt="Alternate Text" />
-                        <input asp-for="@Model.Phone" id="phone-input" class="input__data" type="text" required placeholder="+7 (___) ___-__-__" />
-                        <span class="input__title">Телефон</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-telephone.png" alt="Alternate Text" />
+                        <input asp-for="@Model.Phone" id="phone-input" class="input-data" type="text" required placeholder="+7 (-_) -_----" />
+                        <span class="input-title">Телефон</span>
                     </div>                                  
                     <img id="current-avatar" class="preview" src="@Url.Content(@Model.ImageUrl)" alt="Аватарка по умолчанию" />
-                    <div class="input__box">
+                    <div class="input-box">
                         <label for="fileInput" class="custom-file-upload">
                             Выберите файл
                         </label>    
@@ -38,13 +38,13 @@
                         <input asp-for=Avatar type="file" id="fileInput" class="file-input" accept="image/*">
                         <label id="file-name">Файл не выбран</label>
                     </div>
-                    <div class="input__box">
+                    <div class="input-box">
                         <button type="button" id="resetAvatar">Вернуть исходную аватарку</button>
                     </div>
 
                     <span>@Html.ValidationMessage("ErrorEdit")</span>
-                    <a class="change__pasword" href="@Url.Action("EditPasswordView","Profile")">Изменить пароль</a>
-                    <input asp-action="Edit" class="btn__edit" type="submit" value="Сохранить" />
+                    <a class="change-pasword" href="@Url.Action("EditPasswordView","Profile")">Изменить пароль</a>
+                    <input asp-action="Edit" class="btn-edit" type="submit" value="Сохранить" />
                 </form>
             </div>
         </div>

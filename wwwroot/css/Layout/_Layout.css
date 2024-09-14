@@ -1,4 +1,4 @@
-﻿.menu__container {
+﻿.menu-container {
     position: fixed;
     top: 0;
     right: 0;
@@ -13,7 +13,7 @@
     border-radius: 20px 0px 0px 20px;
     height: 100%;
     width: 30px;
-    padding: 20px 10px;    
+    padding: 20px 10px;
     border: 1px solid #353635;
     transition: width 0.3s ease;
     backdrop-filter: blur(50px);
@@ -24,11 +24,11 @@
         width: 150px;
     }
 
-.btn__click {
+.btn-click {
     padding-bottom: 20px;
     display: flex;
     align-items: center;
-    text-decoration:none;
+    text-decoration: none;
 }
 
 img {
@@ -36,7 +36,7 @@ img {
     height: 30px;
 }
 
-.menu__text {
+.menu-text {
     margin-left: 10px;
     color: white;
     font-size: 16px;
@@ -44,16 +44,34 @@ img {
     transition: opacity 0.3s ease;
 }
 
-.menu:hover .menu__text {
+.menu:hover .menu-text {
     opacity: 1;
 }
 
-.menu-icon {
+.profile-header {
+    display: flex;
+    align-items: center;
     cursor: pointer;
 }
 
-.menu.open {
-    width: 100px;
+.arrow {
+    font-size:10px;
+    color:white;
+    margin-left: 5px;
+    transition: transform 0.3s ease;
 }
 
+.dropdown-content {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
 
+    .dropdown-content.show {
+        max-height: 100px; /* Максимальная высота для плавного раскрытия, подбирается в зависимости от содержания */
+        opacity: 1;
+    }

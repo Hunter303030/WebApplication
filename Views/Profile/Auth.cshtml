@@ -7,24 +7,24 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="form__auth">
+    <div class="form-auth">
         <div class="cont">
-            <div class="form__data">
+            <div class="form-data">
                 <form method="post" asp-controller="Profile">
                     <label class="title">Авторизация</label>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-email.png" alt="Alternate Text" />
-                        <input class="input__data" asp-for=Email type="email" required />
-                        <span class="input__title">Почта</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-email.png" alt="Alternate Text" />
+                        <input class="input-data" asp-for=Email type="email" required />
+                        <span class="input-title">Почта</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input class="input__data" asp-for=Password type="password" value="Chudo62419352!" required />
-                        <span class="input__title">Пароль</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
+                        <input class="input-data" asp-for=Password type="password" value="Chudo62419352!" required />
+                        <span class="input-title">Пароль</span>
                     </div>
                     <span>@Html.ValidationMessage("ErrorAuth")</span>
-                    <a class="recovery__pasword" href="#" >Забыл пароль?</a>
-                    <input asp-action="Auth" class="btn__auth" type="submit" value="Вход"/>
+                    <a class="recovery-pasword" href="#" >Забыл пароль?</a>
+                    <input asp-action="Auth" class="btn-auth" type="submit" value="Вход"/>
                     <span>Нет аккаунта?<a href="@Url.Action("RegisterView","User")">Зарегистрируйся</a></span>
                 </form>
             </div>

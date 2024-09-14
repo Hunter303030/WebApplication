@@ -1,10 +1,10 @@
-﻿.form__auth {
+﻿.form-auth {
     display: flex;
     justify-content: center;
     margin-top: 5%;
 }
 
-.form__data {
+.form-data {
     display: flex;
     justify-content: center;
     backdrop-filter:blur(8px);
@@ -26,12 +26,12 @@ form {
     margin-bottom:30px;
 }
 
-.input__box {
+.input-box {
     position: relative;
     padding-bottom:10px;
 }
 
-.input__data {
+.input-data {
     width: 100%;
     color: white;
     padding: 10px 0;
@@ -44,7 +44,7 @@ form {
     background-color: #353635;
 }
 
-.input__title {
+.input-title {
     color: white;
     position: absolute;
     left: 5%;
@@ -53,7 +53,7 @@ form {
    
 }
 
-.input__icon {
+.input-icon {
     width:20px;
     height:20px;
     position: absolute;
@@ -61,7 +61,7 @@ form {
     top: 12%;
 }
 
-.recovery__pasword {
+.recovery-pasword {
     color: white;
     font-size: 16px;
     display: flex;
@@ -69,7 +69,7 @@ form {
     outline: none;
 }
 
-.btn__auth {
+.btn-auth {
     width: 100%;
     height: 30px;
     background: white;
@@ -82,7 +82,7 @@ form {
     transition: background-color linear 0.1s;
 }
 
-    .btn__auth:hover {
+    .btn-auth:hover {
         background-color: silver;
     }
 

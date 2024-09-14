@@ -9,38 +9,38 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 </head>
 <body>
-    <div class="form__reg">
+    <div class="form-reg">
         <div class="cont">
-            <div class="form__data">
+            <div class="form-data">
                 <form method="post" asp-controller="Profile">
                     <label class="title">Регистрация</label>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
-                        <input asp-for=NickName class="input__data" type="text" required />
-                        <span class="input__title">Псевдоним</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-avatar.png" alt="Alternate Text" />
+                        <input asp-for=NickName class="input-data" type="text" required />
+                        <span class="input-title">Псевдоним</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-email.png" alt="Alternate Text" />
-                        <input asp-for=Email class="input__data" type="email" required />
-                        <span class="input__title">Почта</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-email.png" alt="Alternate Text" />
+                        <input asp-for=Email class="input-data" type="email" required />
+                        <span class="input-title">Почта</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-telephone.png" alt="Alternate Text" />
-                        <input asp-for="Phone" id="phone-input" class="input__data" type="text" value="+7 " required placeholder="+7 (___) ___-__-__" />
-                        <span class="input__title">Телефон</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-telephone.png" alt="Alternate Text" />
+                        <input asp-for="Phone" id="phone-input" class="input-data" type="text" value="+7 " required placeholder="+7 (-_) -_----" />
+                        <span class="input-title">Телефон</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input asp-for=Password id="password" class="input__data" type="password" required />
-                        <span class="input__title">Пароль</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
+                        <input asp-for=Password id="password" class="input-data" type="password" required />
+                        <span class="input-title">Пароль</span>
                     </div>
-                    <div class="input__box">
-                        <img class="input__icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
-                        <input id="confirm-password" class="input__data" type="password" required />
-                        <span class="input__title">Повторите пароль</span>
+                    <div class="input-box">
+                        <img class="input-icon" src="~/Image/icon-lock.png" alt="Alternate Text" />
+                        <input id="confirm-password" class="input-data" type="password" required />
+                        <span class="input-title">Повторите пароль</span>
                     </div>
                     <span>@Html.ValidationMessage("ErrorRegister")</span>
-                    <input asp-action="Register" id="submit-btn" class="btn__reg" type="submit" value="Регистрация" disabled />
+                    <input asp-action="Register" id="submit-btn" class="btn-reg" type="submit" value="Регистрация" disabled />
                 </form>
             </div>
         </div>

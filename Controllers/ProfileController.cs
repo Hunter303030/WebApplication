@@ -71,6 +71,12 @@ namespace WebApplication.Controllers
             }
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return AuthView();
+        }
+
         public IActionResult RegisterView()
         {
             return View("~/Views/profile/Register.cshtml");
