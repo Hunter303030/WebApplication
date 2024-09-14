@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication.Dto.Profile;
 using WebApplication.Models;
-using WebApplication.Repositories.Interfaces;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Controllers
@@ -12,18 +11,15 @@ namespace WebApplication.Controllers
     public class ProfileController : Controller
     {
         private readonly ILogger<ProfileController> _logger;
-        private readonly IProfileRepository _profileRepository;
         private readonly IProfileService _profileService;
         private readonly IWebHostEnvironment _appEnvironment;
 
         public ProfileController(
-                                ILogger<ProfileController> logger,
-                                IProfileRepository profileRepository,
+                                ILogger<ProfileController> logger,                                
                                 IProfileService profileService,
                                 IWebHostEnvironment appEnvironment)
         {
             _logger = logger;
-            _profileRepository = profileRepository;
             _profileService = profileService;
             _appEnvironment = appEnvironment;
         }
@@ -37,7 +33,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                var profileSelect = await _profileRepository.Select(profileAuthDto);
+                var profileSelect = await _profileService.Select(profileAuthDto);
                 if (profileSelect != null)
                 {
                     var claims = new List<Claim>
@@ -84,7 +80,7 @@ namespace WebApplication.Controllers
         {
             try
             {
-                bool profileCreated = await _profileRepository.Create(profile);
+                bool profileCreated = await _profileService.Create(profile);
                 if (profileCreated)
                 {
                     return View("~/Views/profile/Auth.cshtml");
