@@ -12,8 +12,8 @@
         <div class="menu">
             @if (User.Identity.IsAuthenticated)
             {
-                <div class="profile-section">
-                    <div class="profile-header" onclick="toggleDropdown()">
+                <div class="dropdown-section">
+                    <div class="dropdown-header" onclick="toggleDropdown()">
                         <img style="border-radius:50%; border:2px solid white;" src="@imageUrlClaim" alt="Entry Icon" />
                         <span class="menu-text">@User.Identity.Name</span>
                         <span class="arrow">&#9660;</span>
@@ -39,6 +39,13 @@
                 <img src="~/Image/icon-home.png" alt="Home Icon" />
                 <span class="menu-text">Главная</span>
             </a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <a class="btn-click" href="@Url.Action("AddCourseView", "Course")">
+                    <img src="~/Image/icon-plus.png" alt="Home Icon" />
+                    <span class="menu-text">Создать курс</span>
+                </a>
+            }
         </div>
     </div>
 

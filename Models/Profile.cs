@@ -12,5 +12,6 @@
         public int Role_Id { get; set; }
 
         public Role Role { get; set; }
+        public IEnumerable<Course> Courses { get; set; }
     }
 }

@@ -18,5 +18,16 @@ namespace WebApplication.Repositories
             IEnumerable<Course> coursesList = _context.Course.ToList();
             return coursesList;
         }
+
+        public async Task<bool> Add(Course course)
+        {
+            if(course != null)
+            {
+                await _context.Course.AddAsync(course);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+        }
     }
 }

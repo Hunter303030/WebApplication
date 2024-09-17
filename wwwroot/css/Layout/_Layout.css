@@ -42,13 +42,18 @@ img {
     font-size: 16px;
     opacity: 0;
     transition: opacity 0.3s ease;
+    white-space: nowrap;
 }
 
 .menu:hover .menu-text {
     opacity: 1;
 }
 
-.profile-header {
+.dropdown-section {
+    padding-bottom: 10px;
+}
+
+.dropdown-header {
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -72,6 +77,6 @@ img {
 }
 
     .dropdown-content.show {
-        max-height: 100px; /* Максимальная высота для плавного раскрытия, подбирается в зависимости от содержания */
+        max-height: 100px;
         opacity: 1;
     }

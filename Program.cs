@@ -16,7 +16,6 @@ namespace WebApplication
         {
             var builder = Microsoft.AspNetCore.Builder.WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddDbContext<DataContext>(options =>
@@ -33,7 +32,10 @@ namespace WebApplication
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+            builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+
             builder.Services.AddScoped<IProfileService, ProfileService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
             builder.Services.AddScoped<IPasswordService, PasswordService>();
 
             var app = builder.Build();

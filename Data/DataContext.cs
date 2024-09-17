@@ -25,6 +25,16 @@ namespace WebApplication.Data
                 .HasOne(p => p.Role)
                 .WithMany(r => r.Profiles)
                 .HasForeignKey(p => p.Role_Id);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(x => x.Profile)
+                .WithMany(y => y.Courses)
+                .HasForeignKey(x => x.Profile_Id);
+
+            modelBuilder.Entity<Course>()
+                .HasOne(x => x.Status)
+                .WithMany(y => y.Courses)
+                .HasForeignKey(x => x.Status_Id);
         }
 
     }
