@@ -3,7 +3,6 @@ using WebApplication.Data;
 using WebApplication.Dto.Profile;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
-using WebApplication.Service;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Repositories
@@ -19,7 +18,7 @@ namespace WebApplication.Repositories
             _passwordService = passwordService;
         }
 
-        public async Task<Profile?> Select(ProfileAuthDto profileAuthDto)
+        public async Task<Profile> Select(ProfileAuthDto profileAuthDto)
         {
             var profileSelect = await _context.Profile.Where(x => x.Email == profileAuthDto.Email).Include(x => x.Role).FirstOrDefaultAsync();
 
@@ -30,38 +29,24 @@ namespace WebApplication.Repositories
             return null;
         }
 
+        public async Task<bool> IsExists(ProfileRegisterDto profileRegisterDto)
+        {
+            return await _context.Profile.AnyAsync(x => x.NickName == profileRegisterDto.NickName || x.Email == profileRegisterDto.Email || x.Phone == profileRegisterDto.Phone);
+        }
+
         public async Task<bool> Create(Profile profile)
         {
-            Random random = new Random();
-            var avatars = new[] { "/Images/avatar-1.png", "/Images/avatar-2.png", "/Images/avatar-3.png" };
+            if (profile == null) return false;
 
-            bool profileExists = await _context.Profile.AnyAsync(x => x.NickName == profile.NickName || x.Email == profile.Email || x.Phone == profile.Phone);
+            await _context.Profile.AddAsync(profile);
+            await _context.SaveChangesAsync();
 
-            if (!profileExists)
-            {
-                Profile newProfile = new Profile
-                {
-                    Id = Guid.NewGuid(),
-                    NickName = profile.NickName,
-                    Email = profile.Email,
-                    Password = _passwordService.Hash(profile.Password),
-                    Phone = profile.Phone,
-                    DateCreate = DateTime.Now,
-                    ImageUrl = avatars[random.Next(avatars.Length)],
-                    Role_Id = 3
-                };
-
-                await _context.Profile.AddAsync(newProfile);
-                await _context.SaveChangesAsync();
-
-                return true;
-            }
-            return false;
+            return true;
         }
 
         public async Task<Profile> GetProfile(Guid profile_id)
         {
-            var profileEdit = await _context.Profile.Where(x => x.Id == profile_id).FirstOrDefaultAsync();
+            var profileEdit = await _context.Profile.Where(x => x.Id == profile_id).Include(x => x.Role).FirstOrDefaultAsync();
             if (profileEdit != null)
             {
                 return profileEdit;
@@ -103,18 +88,14 @@ namespace WebApplication.Repositories
             return false;
         }
 
-        public async Task<bool> EditPassword(Guid profile_Id,ProfileEditPasswordDto profileEditPasswordDto)
+        public async Task<bool> EditPassword(Profile profile)
         {
-            var profile = await _context.Profile.FirstOrDefaultAsync(x => x.Id == profile_Id);
+            if (profile == null) return false;
 
-            if(profile != null)
-            {
-                profile.Password = _passwordService.Hash(profileEditPasswordDto.NewPassword);
-                _context.Profile.Update(profile );
-                await _context.SaveChangesAsync();
-                return true;
-            }
-            return false;
+            _context.Profile.Update(profile);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
     }
 }

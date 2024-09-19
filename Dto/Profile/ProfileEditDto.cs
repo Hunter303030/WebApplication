@@ -7,6 +7,6 @@
         public string Phone { get; set; }
         public string ImageUrl { get; set; }
 
-        public IFormFile Avatar { get; set; }
+        public IFormFile? Avatar { get; set; }
     }
 }

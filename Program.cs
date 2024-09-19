@@ -35,8 +35,11 @@ namespace WebApplication
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 
             builder.Services.AddScoped<IProfileService, ProfileService>();
-            builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<IProfileCookiesService, ProfileCookiesService>();
             builder.Services.AddScoped<IPasswordService, PasswordService>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 

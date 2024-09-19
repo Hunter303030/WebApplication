@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication.Dto.Profile;
-using WebApplication.Models;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Controllers
@@ -12,16 +10,16 @@ namespace WebApplication.Controllers
     {
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileService _profileService;
-        private readonly IWebHostEnvironment _appEnvironment;
+        private readonly IProfileCookiesService _profileCookiesService;
 
         public ProfileController(
-                                ILogger<ProfileController> logger,                                
+                                ILogger<ProfileController> logger,
                                 IProfileService profileService,
-                                IWebHostEnvironment appEnvironment)
+                                IProfileCookiesService profileCookiesService)
         {
             _logger = logger;
             _profileService = profileService;
-            _appEnvironment = appEnvironment;
+            _profileCookiesService = profileCookiesService;
         }
 
         public IActionResult AuthView()
@@ -31,88 +29,81 @@ namespace WebApplication.Controllers
 
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
+            if (profileAuthDto == null)
+            {
+                _logger.LogError("Ошибка модели авторизации!");
+                ModelState.AddModelError("ErrorAuth", "Ошибка модели авторизации!");
+                return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
+            }
             try
             {
-                var profileSelect = await _profileService.Select(profileAuthDto);
-                if (profileSelect != null)
-                {
-                    var claims = new List<Claim>
-                    {
-                    new Claim(ClaimTypes.NameIdentifier, Convert.ToString(profileSelect.Id)),
-                    new Claim(ClaimTypes.Name, profileSelect.NickName),
-                    new Claim(ClaimTypes.Role, profileSelect.Role.Title),
-                    new Claim("ImageUrl",profileSelect.ImageUrl)
-                    };
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                bool profileSelect = await _profileService.Select(profileAuthDto);
 
-                    var authProperties = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
-                    };
-
-                    await HttpContext.SignInAsync(
-                        CookieAuthenticationDefaults.AuthenticationScheme,
-                        new ClaimsPrincipal(claimsIdentity),
-                        authProperties);
-                    return RedirectToAction("List", "Course");
-                }
-                else
+                if (!profileSelect)
                 {
                     ModelState.AddModelError("ErrorAuth", "Неверная почта или пароль!");
-                    return View("~/Views/profile/Auth.cshtml", profileAuthDto);
+                    return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
                 }
+
+                return RedirectToAction("List", "Course");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Произошла ошибка при авторизации!");
-                ModelState.AddModelError("ErrorAuth", "Произошла ошибка при авторизации!");
-                return View("~/Views/profile/Auth.cshtml", profileAuthDto);
+                _logger.LogError(ex, "Ошибка авторизации!");
+                ModelState.AddModelError("ErrorAuth", "Ошибка авторизации!");
+                return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
             }
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return AuthView();
+            await _profileCookiesService.SignOutAsync();
+            return View("~/Views/Profile/Auth.cshtml");
         }
 
         public IActionResult RegisterView()
         {
-            return View("~/Views/profile/Register.cshtml");
+            return View("~/Views/Profile/Register.cshtml");
         }
 
-        public async Task<IActionResult> Register(Profile profile)
+        public async Task<IActionResult> Register(ProfileRegisterDto profileRegisterDto)
         {
+            if (profileRegisterDto== null)
+            {
+                _logger.LogError("Ошибка модели регистрации!");
+                ModelState.AddModelError("ErrorRegister", "Ошибка модели регистрации!");
+                return View("~/Views/Profile/Register.cshtml", profileRegisterDto);
+            }
             try
             {
-                bool profileCreated = await _profileService.Create(profile);
+                bool profileCreated = await _profileService.Create(profileRegisterDto);
+
                 if (profileCreated)
                 {
-                    return View("~/Views/profile/Auth.cshtml");
+                    return View("~/Views/Profile/Auth.cshtml");
                 }
                 else
                 {
                     ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом, телефоно или почтой уже существует!");
-                    return View("~/Views/profile/Register.cshtml", profile);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Произошла ошибка при регистрации!");
-                ModelState.AddModelError("ErrorRegister", "Произошла ошибка при регистрации!");
-                return View("~/Views/profile/Register.cshtml", profile);
+                _logger.LogError(ex, "Произошла ошибка регистрации!");
+                ModelState.AddModelError("ErrorRegister", "Произошла ошибка регистрации!");
             }
+            return View("~/Views/Profile/Register.cshtml", profileRegisterDto);
         }
 
-
+        [Authorize]
         public async Task<IActionResult> EditView()
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var profileEdit = await _profileService.GetProfile(Guid.Parse(userId));
-                return View("~/Views/profile/Edit.cshtml", profileEdit);
+                var profileEdit = await _profileService.GetProfileForEdit(Guid.Parse(userId));
+                return View("~/Views/Profile/Edit.cshtml", profileEdit);
             }
             catch (Exception ex)
             {
@@ -121,90 +112,73 @@ namespace WebApplication.Controllers
             }
         }
 
-        public async Task<IActionResult> Edit(ProfileEditDto profileEdit)
+        [Authorize]
+        public async Task<IActionResult> Edit(ProfileEditDto profileEditDto)
         {
+            if (profileEditDto == null)
+            {
+                _logger.LogError("Ошибка модели редактирования!");
+                ModelState.AddModelError("ErrorEdit", "Ошибка модели редактирования!");
+                return View("~/Views/Profile/Edit.cshtml", profileEditDto);
+            }
             try
             {
-                if (profileEdit.Avatar != null)
-                {
-                    string folderPath = Path.Combine(_appEnvironment.WebRootPath, "Avatar");
+                var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                bool cheach = await _profileService.Edit(profileEditDto, Guid.Parse(profileId));
 
-                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(profileEdit.Avatar.FileName);
-                    string filePath = Path.Combine(folderPath, fileName);
-
-                    using (var fileStream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await profileEdit.Avatar.CopyToAsync(fileStream);
-                    }
-                    profileEdit.ImageUrl = "/Avatar/" + fileName;
-                }
-
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                bool cheach = await _profileService.Edit(profileEdit, Guid.Parse(userId));
-
-                if (cheach)
-                {
-                    var claims = new List<Claim>
-                    {
-                        new Claim(ClaimTypes.NameIdentifier, Convert.ToString(userId)),
-                        new Claim(ClaimTypes.Name, profileEdit.NickName),
-                        new Claim("ImageUrl",profileEdit.ImageUrl)
-                    };
-
-                    var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    var authProperties = new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        ExpiresUtc = DateTimeOffset.UtcNow.AddHours(2)
-                    };
-
-                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
-                }
-                else
+                if (!cheach)
                 {
                     ModelState.AddModelError("ErrorEdit", "Данные уже заняты!");
                 }
+                return View("~/Views/Profile/Edit.cshtml", profileEditDto);
 
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("ErrorEdit", "Произошла ошибка при редактировании!");
-                _logger.LogError(ex, "Произошла ошибка при редактирования!");
+                ModelState.AddModelError("ErrorEdit", "Произошла ошибка редактировании!");
+                _logger.LogError(ex, "Произошла ошибка редактирования!");
             }
-            return View("~/Views/profile/Edit.cshtml", profileEdit);
+            return View("~/Views/Profile/Edit.cshtml", profileEditDto);
         }
 
+        [Authorize]
         public IActionResult EditPasswordView()
         {
             return View("~/Views/Profile/EditPassword.cshtml");
         }
 
+        [Authorize]
         public async Task<IActionResult> EditPassword(ProfileEditPasswordDto profileEditPasswordDto)
         {
+            if (profileEditPasswordDto == null)
+            {
+                _logger.LogError("Ошибка модели изменения пароля!");
+                ModelState.AddModelError("ErrorEditPassword", "Ошибка модели изменения пароля!");
+            }
             try
             {
-                if(profileEditPasswordDto != null)
+                if(profileEditPasswordDto.NewPassword != profileEditPasswordDto.ConfirmPassword)
                 {
-                    var profile_Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    bool cheak = await _profileService.EditPassword(profileEditPasswordDto, Guid.Parse(profile_Id));
+                    _logger.LogError("Пароль не совпадает!");
+                    ModelState.AddModelError("ErrorEditPassword", "Пароль не совпадает!");
+                }
 
-                    if (cheak)
-                    {
-                        return await EditView();
-                    }
-                    else
-                    {
-                        ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка во время изменения пароля!");
-                    }
+                var profile_Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                bool cheak = await _profileService.EditPassword(profileEditPasswordDto, Guid.Parse(profile_Id));
+
+                if (!cheak)
+                {
+                    ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка изменения пароля!");
+                    _logger.LogError("Произошла ошибка изменения пароля!");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка во время изменения пароля!");
-                _logger.LogError(ex, "Произошла ошибка во время изменения пароля!");
+                ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка изменения пароля!");
+                _logger.LogError(ex, "Произошла ошибка изменения пароля!");
             }
-            return View("~/Views/Profile/EditPassword.cshtml");
+
+            return View("~/Views/Profile/EditPassword.cshtml", profileEditPasswordDto);
         }
     }
 }
