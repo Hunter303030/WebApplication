@@ -1,0 +1,64 @@
+﻿<div id="notification" class="notification hidden">
+    <span id="notification-message"></span>
+    <button onclick="closeNotification()">x</button>
+</div>
+
+<style>
+    .notification {
+        position: fixed;
+        left: -300px;
+        top: 20px;
+        color: white;
+        padding: 16px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        transition: left 0.3s ease;
+    }
+
+        .notification.success {
+            background-color: #4CAF50; /* Зеленый цвет для успеха */
+        }
+
+        .notification.error {
+            background-color: #f44336; /* Красный цвет для ошибки */
+        }
+
+        .notification.hidden {
+            display: none;
+        }
+
+        .notification.show {
+            left: 20px;
+        }
+
+</style>
+
+<script>
+    function showNotification(message, isSuccess = false) {
+        const notification = document.getElementById('notification');
+        const messageElem = document.getElementById('notification-message');
+
+        messageElem.textContent = message;
+
+        if (isSuccess) {
+            notification.classList.add('success');
+        } else {
+            notification.classList.remove('success');
+        }
+
+        notification.classList.remove('hidden');
+        notification.classList.add('show');
+
+        setTimeout(() => {
+            closeNotification();
+        }, 5000);
+    }
+
+    function closeNotification() {
+        const notification = document.getElementById('notification');
+        notification.classList.remove('show');
+        setTimeout(() => {
+            notification.classList.add('hidden');
+        }, 300);
+    }
+</script>
