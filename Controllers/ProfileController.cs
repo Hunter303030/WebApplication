@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApplication.Dto.Profile;
+using WebApplication.Service;
 using WebApplication.Service.Interfase;
 
 namespace WebApplication.Controllers
@@ -11,15 +12,18 @@ namespace WebApplication.Controllers
         private readonly ILogger<ProfileController> _logger;
         private readonly IProfileService _profileService;
         private readonly IProfileCookiesService _profileCookiesService;
+        private readonly INotificationService _notificationService;
 
         public ProfileController(
                                 ILogger<ProfileController> logger,
                                 IProfileService profileService,
-                                IProfileCookiesService profileCookiesService)
+                                IProfileCookiesService profileCookiesService,
+                                INotificationService notificationService)
         {
             _logger = logger;
             _profileService = profileService;
             _profileCookiesService = profileCookiesService;
+            _notificationService = notificationService;
         }
 
         public IActionResult AuthView()
@@ -31,8 +35,8 @@ namespace WebApplication.Controllers
         {
             if (profileAuthDto == null)
             {
+                //_notificationService.Message("Ошибка модели авторизации!", "error");
                 _logger.LogError("Ошибка модели авторизации!");
-                ModelState.AddModelError("ErrorAuth", "Ошибка модели авторизации!");
                 return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
             }
             try
@@ -41,7 +45,7 @@ namespace WebApplication.Controllers
 
                 if (!profileSelect)
                 {
-                    ModelState.AddModelError("ErrorAuth", "Неверная почта или пароль!");
+                    //_notificationService.Message("Неверная почта или пароль!", "error");
                     return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
                 }
 
@@ -50,7 +54,7 @@ namespace WebApplication.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ошибка авторизации!");
-                ModelState.AddModelError("ErrorAuth", "Ошибка авторизации!");
+                //_notificationService.Message("Ошибка авторизации!", "error");
                 return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
             }
         }
@@ -72,7 +76,7 @@ namespace WebApplication.Controllers
             if (profileRegisterDto== null)
             {
                 _logger.LogError("Ошибка модели регистрации!");
-                ModelState.AddModelError("ErrorRegister", "Ошибка модели регистрации!");
+                //_notificationService.Message("Ошибка модели регистрации!", "error");
                 return View("~/Views/Profile/Register.cshtml", profileRegisterDto);
             }
             try
@@ -81,11 +85,12 @@ namespace WebApplication.Controllers
 
                 if (profileCreated)
                 {
+                    //_notificationService.Message("Регистрация прошла успешно!", NotificationService.MessageType.Error.ToString());
                     return View("~/Views/Profile/Auth.cshtml");
                 }
                 else
                 {
-                    ModelState.AddModelError("ErrorRegister", "Пользователь с таким псевдонимом, телефоно или почтой уже существует!");
+                    //_notificationService.Message("Пользователь с таким псевдонимом, телефоно или почтой уже существует!", "error");
                 }
             }
             catch (Exception ex)
@@ -128,8 +133,14 @@ namespace WebApplication.Controllers
 
                 if (!cheach)
                 {
-                    ModelState.AddModelError("ErrorEdit", "Данные уже заняты!");
+                    //ModelState.AddModelError("ErrorEdit", "Данные уже заняты!");
+                    _notificationService.Message("Ошибка обновлений данных!", NotificationService.MessageType.Error);
+                    //TempData["Message"] = "Ошибка при обновлении данных!";
+                    //TempData["MessageType"] = "error";
+                    return View("~/Views/Profile/Edit.cshtml", profileEditDto);
                 }
+                //TempData["Message"] = "Данные обновлены успешно!";
+                //TempData["MessageType"] = "success";
                 return View("~/Views/Profile/Edit.cshtml", profileEditDto);
 
             }

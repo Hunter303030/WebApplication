@@ -1,0 +1,36 @@
+﻿#popup {
+    position: fixed;
+    left: -300px;
+    top: 20px;
+    padding: 15px;
+    font-size: 16px;
+    border: 1px solid #353635;
+    border-radius: 5px;
+    z-index: 1000;
+    transition: left 0.9s ease-in-out, opacity 0.9s ease-in-out;
+    max-width: 90%;
+    word-wrap: break-word;
+    white-space: pre-line;
+    backdrop-filter: blur(50px);
+}
+
+    #popup.show {
+        left: 20px;
+        opacity: 1;
+    }
+
+.success {
+    color: green;
+}
+
+.error {
+    color: red;
+}
+
+.warning {
+    color: yellow;
+}
+
+.info {
+    color: blue;
+}
