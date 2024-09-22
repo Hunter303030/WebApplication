@@ -4,6 +4,7 @@ using System.Security.Claims;
 using WebApplication.Dto.Profile;
 using WebApplication.Service;
 using WebApplication.Service.Interfase;
+using WebApplication.ViewsPath;
 
 namespace WebApplication.Controllers
 {
@@ -26,18 +27,29 @@ namespace WebApplication.Controllers
             _notificationService = notificationService;
         }
 
+        public IActionResult HandleNotification(string message, NotificationService.MessageType messageType, string viewPath, object? model = null)
+        {
+            _notificationService.Message(message, messageType);
+
+            if (model != null)
+            {
+                return View(viewPath, model);
+            }
+            return View(viewPath);
+        }
+
+
         public IActionResult AuthView()
         {
-            return View("~/Views/profile/Auth.cshtml");
+            return View(ViewPaths.Profile.Auth);
         }
 
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
             if (profileAuthDto == null)
             {
-                //_notificationService.Message("Ошибка модели авторизации!", "error");
                 _logger.LogError("Ошибка модели авторизации!");
-                return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
+                return HandleNotification("Ошибка модели авторизации!", NotificationService.MessageType.Error, ViewPaths.Profile.Auth, profileAuthDto);
             }
             try
             {
@@ -45,17 +57,15 @@ namespace WebApplication.Controllers
 
                 if (!profileSelect)
                 {
-                    //_notificationService.Message("Неверная почта или пароль!", "error");
-                    return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
+                    return HandleNotification("Неверная почта или пароль!", NotificationService.MessageType.Error, ViewPaths.Profile.Auth, profileAuthDto);
                 }
-
+                _notificationService.Message("Вы успешно вошли в аккаунт!", NotificationService.MessageType.Success);
                 return RedirectToAction("List", "Course");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Ошибка авторизации!");
-                //_notificationService.Message("Ошибка авторизации!", "error");
-                return View("~/Views/Profile/Auth.cshtml", profileAuthDto);
+                return HandleNotification("Ошибка авторизации!", NotificationService.MessageType.Error, ViewPaths.Profile.Auth, profileAuthDto);
             }
         }
 
@@ -63,42 +73,40 @@ namespace WebApplication.Controllers
         public async Task<IActionResult> Logout()
         {
             await _profileCookiesService.SignOutAsync();
-            return View("~/Views/Profile/Auth.cshtml");
+            _notificationService.Message("Вы успешно вышли из аккаунта!", NotificationService.MessageType.Success);
+            return RedirectToAction("AuthView");
         }
 
         public IActionResult RegisterView()
         {
-            return View("~/Views/Profile/Register.cshtml");
+            return View(ViewPaths.Profile.Register);
         }
 
         public async Task<IActionResult> Register(ProfileRegisterDto profileRegisterDto)
         {
-            if (profileRegisterDto== null)
+            if (profileRegisterDto == null)
             {
                 _logger.LogError("Ошибка модели регистрации!");
-                //_notificationService.Message("Ошибка модели регистрации!", "error");
-                return View("~/Views/Profile/Register.cshtml", profileRegisterDto);
+                return HandleNotification("Ошибка модели регистрации!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
             }
             try
             {
                 bool profileCreated = await _profileService.Create(profileRegisterDto);
 
-                if (profileCreated)
+                if (!profileCreated)
                 {
-                    //_notificationService.Message("Регистрация прошла успешно!", NotificationService.MessageType.Error.ToString());
-                    return View("~/Views/Profile/Auth.cshtml");
+                    return HandleNotification("Ошибка регистрации!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
                 }
-                else
-                {
-                    //_notificationService.Message("Пользователь с таким псевдонимом, телефоно или почтой уже существует!", "error");
-                }
+
+                _notificationService.Message("Регистриция прошла успешно!", NotificationService.MessageType.Success);
+                return View(ViewPaths.Profile.Auth);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Произошла ошибка регистрации!");
-                ModelState.AddModelError("ErrorRegister", "Произошла ошибка регистрации!");
-            }
-            return View("~/Views/Profile/Register.cshtml", profileRegisterDto);
+                _logger.LogError(ex, "Ошибка регистрации!");
+                return HandleNotification("Ошибка регистрации!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
+
+            }            
         }
 
         [Authorize]
@@ -106,13 +114,26 @@ namespace WebApplication.Controllers
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var profileEdit = await _profileService.GetProfileForEdit(Guid.Parse(userId));
-                return View("~/Views/Profile/Edit.cshtml", profileEdit);
+                var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (profileId == null)
+                {
+                    _logger.LogError("Ошибка уникального индификатора пользователя!");
+                    return HandleNotification("Ошибка уникального индификатора пользователя!", NotificationService.MessageType.Error, ViewPaths.Profile.Edit);
+                }
+
+                var profileEdit = await _profileService.GetProfileForEdit(Guid.Parse(profileId));
+                if(profileEdit == null)
+                {
+                    _notificationService.Message("Произошла ошибка при вызове формы редактирования!", NotificationService.MessageType.Error);
+                    return RedirectToAction("List", "Course");
+                }
+                return View(ViewPaths.Profile.Edit, profileEdit);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Произошла ошибка при вызове формы редактирования!");
+                _notificationService.Message("Произошла ошибка при вызове формы редактирования!", NotificationService.MessageType.Error);
                 return RedirectToAction("List", "Course");
             }
         }
@@ -123,39 +144,38 @@ namespace WebApplication.Controllers
             if (profileEditDto == null)
             {
                 _logger.LogError("Ошибка модели редактирования!");
-                ModelState.AddModelError("ErrorEdit", "Ошибка модели редактирования!");
-                return View("~/Views/Profile/Edit.cshtml", profileEditDto);
+                return HandleNotification("Ошибка модели редактирования!", NotificationService.MessageType.Error, ViewPaths.Profile.Edit, profileEditDto);
             }
             try
             {
                 var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (profileId == null)
+                {
+                    _logger.LogError("Ошибка уникального индификатора пользователя!");
+                    return HandleNotification("Ошибка уникального индификатора пользователя!", NotificationService.MessageType.Error, ViewPaths.Profile.Edit);
+                }
+
                 bool cheach = await _profileService.Edit(profileEditDto, Guid.Parse(profileId));
 
                 if (!cheach)
                 {
-                    //ModelState.AddModelError("ErrorEdit", "Данные уже заняты!");
-                    _notificationService.Message("Ошибка обновлений данных!", NotificationService.MessageType.Error);
-                    //TempData["Message"] = "Ошибка при обновлении данных!";
-                    //TempData["MessageType"] = "error";
-                    return View("~/Views/Profile/Edit.cshtml", profileEditDto);
+                    return HandleNotification("Произошла ошибка редактирования!", NotificationService.MessageType.Error, ViewPaths.Profile.Edit, profileEditDto);
                 }
-                //TempData["Message"] = "Данные обновлены успешно!";
-                //TempData["MessageType"] = "success";
-                return View("~/Views/Profile/Edit.cshtml", profileEditDto);
-
+                _notificationService.Message("Данные успешно обновлены!", NotificationService.MessageType.Success);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("ErrorEdit", "Произошла ошибка редактировании!");
                 _logger.LogError(ex, "Произошла ошибка редактирования!");
+                _notificationService.Message("Произошла ошибка редактирования!", NotificationService.MessageType.Error);
             }
-            return View("~/Views/Profile/Edit.cshtml", profileEditDto);
+            return View(ViewPaths.Profile.Edit, profileEditDto);
         }
 
         [Authorize]
         public IActionResult EditPasswordView()
         {
-            return View("~/Views/Profile/EditPassword.cshtml");
+            return View(ViewPaths.Profile.EditPassword);
         }
 
         [Authorize]
@@ -164,32 +184,40 @@ namespace WebApplication.Controllers
             if (profileEditPasswordDto == null)
             {
                 _logger.LogError("Ошибка модели изменения пароля!");
-                ModelState.AddModelError("ErrorEditPassword", "Ошибка модели изменения пароля!");
+                return HandleNotification("Ошибка модели изменения пароля!", NotificationService.MessageType.Error, ViewPaths.Profile.EditPassword, profileEditPasswordDto);
             }
             try
             {
-                if(profileEditPasswordDto.NewPassword != profileEditPasswordDto.ConfirmPassword)
+                if (profileEditPasswordDto.NewPassword != profileEditPasswordDto.ConfirmPassword)
                 {
                     _logger.LogError("Пароль не совпадает!");
-                    ModelState.AddModelError("ErrorEditPassword", "Пароль не совпадает!");
+                    return HandleNotification("Пароль не совпадает!", NotificationService.MessageType.Warning, ViewPaths.Profile.EditPassword, profileEditPasswordDto);
                 }
 
-                var profile_Id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                bool cheak = await _profileService.EditPassword(profileEditPasswordDto, Guid.Parse(profile_Id));
+                var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (profileId == null)
+                {
+                    _logger.LogError("Ошибка уникального индификатора пользователя!");
+                    return HandleNotification("Ошибка уникального индификатора пользователя!", NotificationService.MessageType.Error, ViewPaths.Profile.EditPassword);
+                }
+
+                bool cheak = await _profileService.EditPassword(profileEditPasswordDto, Guid.Parse(profileId));
 
                 if (!cheak)
                 {
-                    ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка изменения пароля!");
                     _logger.LogError("Произошла ошибка изменения пароля!");
+                    return HandleNotification("Произошла ошибка изменения пароля!", NotificationService.MessageType.Error, ViewPaths.Profile.EditPassword, profileEditPasswordDto);
                 }
+                _notificationService.Message("Пароль успешно изменен!", NotificationService.MessageType.Success);
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("ErrorEditPassword", "Произошла ошибка изменения пароля!");
                 _logger.LogError(ex, "Произошла ошибка изменения пароля!");
+                _notificationService.Message("Произошла ошибка изменения пароля!", NotificationService.MessageType.Error);
             }
 
-            return View("~/Views/Profile/EditPassword.cshtml", profileEditPasswordDto);
+            return View(ViewPaths.Profile.EditPassword, profileEditPasswordDto);
         }
     }
 }

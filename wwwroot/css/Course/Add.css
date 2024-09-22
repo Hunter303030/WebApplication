@@ -58,6 +58,8 @@ form {
     field-sizing: content;
     resize: vertical;
     overflow: hidden;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 16px;
 }
 
 .preview {

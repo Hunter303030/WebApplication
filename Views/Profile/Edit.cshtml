@@ -41,8 +41,6 @@
                     <div class="input-box">
                         <button type="button" id="resetAvatar">Вернуть исходную аватарку</button>
                     </div>
-
-                    <span>@Html.ValidationMessage("ErrorEdit")</span>
                     <a class="change-pasword" href="@Url.Action("EditPasswordView","Profile")">Изменить пароль</a>
                     <input asp-action="Edit" class="btn-edit" type="submit" value="Сохранить" />
                 </form>

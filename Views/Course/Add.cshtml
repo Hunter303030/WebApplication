@@ -38,7 +38,6 @@
                         <input asp-for=Preview type="file" id="fileInput" class="file-input" accept="image/*">
                         <label id="file-name">Файл не выбран</label>
                     </div>
-                    <span>@Html.ValidationMessage("ErrorAddCourse")</span>
                     <input asp-action="AddCourse" class="btn-add" type="submit" value="Добавить" />
                 </form>
             </div>

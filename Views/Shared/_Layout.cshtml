@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="~/css/popup/popup.css" />
+    <link rel="stylesheet" href="~/css/popup/popup.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Layout/_Layout.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
@@ -60,10 +60,11 @@
             <text>
                     setTimeout(function() {
                         showPopup('@Html.Raw(TempData["Message"])', '@TempData["MessageType"]');
-                                    }, 1000);
+                                }, 1000);
             </text>
         }
     </script>
+
     <footer>
         <div class="cont"></div>
     </footer>

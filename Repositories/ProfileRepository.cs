@@ -44,9 +44,9 @@ namespace WebApplication.Repositories
             return true;
         }
 
-        public async Task<Profile> GetProfile(Guid profile_id)
+        public async Task<Profile> GetProfile(Guid profileId)
         {
-            var profileEdit = await _context.Profile.Where(x => x.Id == profile_id).Include(x => x.Role).FirstOrDefaultAsync();
+            var profileEdit = await _context.Profile.Where(x => x.Id == profileId).Include(x => x.Role).FirstOrDefaultAsync();
             if (profileEdit != null)
             {
                 return profileEdit;

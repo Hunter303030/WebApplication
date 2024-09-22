@@ -16,9 +16,9 @@ namespace WebApplication.Service
             _appEnvironment = appEnvironment;
         }
 
-        public async Task<bool> Add(CourseAddDto courseAddDto, Guid profile_Id)
+        public async Task<bool> Add(CourseAddDto courseAddDto, Guid profileId)
         {
-            if (courseAddDto != null && profile_Id != Guid.Empty)
+            if (courseAddDto != null && profileId != Guid.Empty)
             {
                 if (courseAddDto.Preview != null)
                 {
@@ -43,7 +43,7 @@ namespace WebApplication.Service
                         DateUpdata = DateTime.Now,
                         PreviewUrl = $"/Course/{courseId}/" + fileName,
                         Status_Id = 1,
-                        Profile_Id = profile_Id
+                        Profile_Id = profileId
                     };
                     
                     bool cheak = await _courseRepository.Add(newCourse);

@@ -130,17 +130,20 @@ namespace WebApplication.Service
             }
         }
 
-        public async Task<bool> EditPassword(ProfileEditPasswordDto profileEditPasswordDto, Guid profile_Id)
+        public async Task<bool> EditPassword(ProfileEditPasswordDto profileEditPasswordDto, Guid profileId)
         {
-            if (profileEditPasswordDto == null || profile_Id == Guid.Empty) return false;
+            if (profileEditPasswordDto == null || profileId == Guid.Empty)
+                return false;
 
-            var editPassword = _profileRepository.GetProfile(profile_Id);
-            if (editPassword == null) return false;
+            var editPassword = await _profileRepository.GetProfile(profileId);
 
-            _mapper.Map(editPassword, profileEditPasswordDto);
+            if (editPassword == null)
+                return false;
 
+            _mapper.Map(profileEditPasswordDto, editPassword);
 
-            return await _profileRepository.EditPassword(await editPassword);
+            return await _profileRepository.EditPassword(editPassword);
         }
+
     }
 }
