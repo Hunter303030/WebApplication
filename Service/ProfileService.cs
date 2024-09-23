@@ -140,7 +140,8 @@ namespace WebApplication.Service
             if (editPassword == null)
                 return false;
 
-            _mapper.Map(profileEditPasswordDto, editPassword);
+            profileEditPasswordDto.Password = _passwordService.Hash(profileEditPasswordDto.ConfirmPassword);
+            var cheak = _mapper.Map(profileEditPasswordDto, editPassword);
 
             return await _profileRepository.EditPassword(editPassword);
         }

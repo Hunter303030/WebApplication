@@ -95,7 +95,7 @@ namespace WebApplication.Controllers
 
                 if (!profileCreated)
                 {
-                    return HandleNotification("Ошибка регистрации!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
+                    return HandleNotification("Пользователь с такой псевданимом, почтой или телефоном уже существует!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
                 }
 
                 _notificationService.Message("Регистриция прошла успешно!", NotificationService.MessageType.Success);
@@ -188,7 +188,7 @@ namespace WebApplication.Controllers
             }
             try
             {
-                if (profileEditPasswordDto.NewPassword != profileEditPasswordDto.ConfirmPassword)
+                if (profileEditPasswordDto.Password != profileEditPasswordDto.ConfirmPassword)
                 {
                     _logger.LogError("Пароль не совпадает!");
                     return HandleNotification("Пароль не совпадает!", NotificationService.MessageType.Warning, ViewPaths.Profile.EditPassword, profileEditPasswordDto);

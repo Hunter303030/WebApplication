@@ -69,13 +69,15 @@ namespace WebApplication.Repositories
             bool emailChanged = existingProfile.Email != profile.Email;
             bool nickNameChanged = existingProfile.NickName != profile.NickName;
             bool phoneChanged = existingProfile.Phone != profile.Phone;
+            bool avatarChanged = existingProfile.ImageUrl != profile.ImageUrl;
 
-            if (emailChanged || nickNameChanged || phoneChanged)
+            if (emailChanged || nickNameChanged || phoneChanged || avatarChanged)
             {
                 bool isDuplicate = await _context.Profile
                     .AnyAsync(x => (emailChanged && x.Email == profile.Email) ||
                                    (nickNameChanged && x.NickName == profile.NickName) ||
-                                   (phoneChanged && x.Phone == profile.Phone)
+                                   (phoneChanged && x.Phone == profile.Phone) ||
+                                   (avatarChanged && x.ImageUrl == profile.ImageUrl)
                                    && x.Id != profile.Id);
 
                 if (!isDuplicate)
