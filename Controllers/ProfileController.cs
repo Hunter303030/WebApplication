@@ -60,7 +60,7 @@ namespace WebApplication.Controllers
                     return HandleNotification("Неверная почта или пароль!", NotificationService.MessageType.Error, ViewPaths.Profile.Auth, profileAuthDto);
                 }
                 _notificationService.Message("Вы успешно вошли в аккаунт!", NotificationService.MessageType.Success);
-                return RedirectToAction("List", "Course");
+                return RedirectToAction("ListAll", "Course");
             }
             catch (Exception ex)
             {

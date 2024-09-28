@@ -13,9 +13,9 @@
     });
 });
 
-function toggleDropdown() {
-    var dropdown = document.getElementById("dropdownContent");
-    var arrow = document.querySelector(".arrow");
+function toggleDropdown(event, dropdownId) {
+    var dropdown = document.getElementById(dropdownId);
+    var arrow = event.currentTarget.querySelector(".arrow");
 
     if (dropdown.classList.contains("show")) {
         dropdown.classList.remove("show");
@@ -25,4 +25,3 @@ function toggleDropdown() {
         arrow.style.transform = "rotate(180deg)";
     }
 }
-

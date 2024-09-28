@@ -53,7 +53,7 @@ namespace WebApplication
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Course}/{action=List}");
+                pattern: "{controller=Course}/{action=ListAll}");
 
             app.Run();
         }

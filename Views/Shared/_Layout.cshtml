@@ -9,17 +9,17 @@
     @{
         var imageUrlClaim = User.FindFirst("ImageUrl")?.Value ?? Url.Content("~/Image/avatar-1.png");
     }
-    <div class="menu-container">
+    <div class="menu-cont">
         <div class="menu">
             @if (User.Identity.IsAuthenticated)
             {
                 <div class="dropdown-section">
-                    <div class="dropdown-header" onclick="toggleDropdown()">
-                        <img style="border-radius:50%; border:2px solid white;" src="@imageUrlClaim" alt="Entry Icon" />
+                    <div class="dropdown-header" onclick="toggleDropdown(event,'profileDropdown')">
+                        <img style="border-radius:50%; border:2px solid white;" src="@imageUrlClaim" alt="Icon" />
                         <span class="menu-text">@User.Identity.Name</span>
                         <span class="arrow">&#9660;</span>
                     </div>
-                    <div class="dropdown-content" id="dropdownContent">
+                    <div class="dropdown-content" id="profileDropdown">
                         <a class="btn-click" href="@Url.Action("EditView", "Profile")">
                             <span class="menu-text">Редактировать</span>
                         </a>
@@ -32,7 +32,7 @@
             else
             {
                 <a class="btn-click" href="@Url.Action("AuthView", "Profile")">
-                    <img src="~/Image/icon-entry.png" alt="Entry Icon" />
+                    <img src="~/Image/icon-entry.png" alt="Icon" />
                     <span class="menu-text">Вход</span>
                 </a>
             }
@@ -40,11 +40,12 @@
                 <img src="~/Image/icon-home.png" alt="Home Icon" />
                 <span class="menu-text">Главная</span>
             </a>
+
             @if (User.Identity.IsAuthenticated)
             {
-                <a class="btn-click" href="@Url.Action("AddCourseView", "Course")">
-                    <img src="~/Image/icon-plus.png" alt="Home Icon" />
-                    <span class="menu-text">Создать курс</span>
+                <a class="btn-click" href="@Url.Action("ListControl", "Course")">
+                    <img src="~/Image/icon-control-course.png" alt="Icon" />
+                    <span class="menu-text">Управление курсами</span>
                 </a>
             }
         </div>
@@ -58,9 +59,7 @@
         @if (TempData["Message"] != null)
         {
             <text>
-                    setTimeout(function() {
-                        showPopup('@Html.Raw(TempData["Message"])', '@TempData["MessageType"]');
-                                }, 1000);
+                    setTimeout(function() {showPopup('@Html.Raw(TempData["Message"])', '@TempData["MessageType"]');}, 1000);
             </text>
         }
     </script>

@@ -5,7 +5,8 @@
         public static class Course
         {
             public const string Add = "~/Views/Course/Add.cshtml";
-            public const string List = "~/Views/Course/List.cshtml";
+            public const string ListControl = "~/Views/Course/ListControl.cshtml";
+            public const string ListAll = "~/Views/Course/ListAll.cshtml";
         }
 
         public static class Profile

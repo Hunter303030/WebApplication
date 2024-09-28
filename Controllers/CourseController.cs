@@ -35,9 +35,16 @@ namespace WebApplication.Controllers
             return View(viewPath);
         }
 
-        public IActionResult List()
+        public IActionResult ListAll()
         {
-            return View(ViewPaths.Course.List);
+            return View(ViewPaths.Course.ListAll);
+        }
+
+
+
+        public IActionResult ListControl()
+        {
+            return View(ViewPaths.Course.ListControl);
         }
 
         [Authorize]
@@ -70,7 +77,7 @@ namespace WebApplication.Controllers
                 if (cheack)
                 {
                     _notificationService.Message("Курс успешно создан!", NotificationService.MessageType.Success);
-                    return List();
+                    return RedirectToAction("ListAll");
                 }
                 else
                 {

@@ -1,8 +1,9 @@
-﻿.menu-container {
+﻿.menu-cont {
     position: fixed;
     top: 0;
     right: 0;
     height: 100%;
+    z-index: 1000;
 }
 
 .menu {
@@ -21,7 +22,7 @@
 }
 
     .menu:hover {
-        width: 150px;
+        width: 200px;
     }
 
 .btn-click {

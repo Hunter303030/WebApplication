@@ -5,9 +5,7 @@ html {
 
 body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    background: url(../Image/background.png);    
-    margin: 0;
-    padding: 0;
+    background: url(../Image/background.png);       
 }
 
 .cont {

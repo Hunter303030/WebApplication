@@ -1,0 +1,121 @@
+﻿.form-course {
+    border: 2px solid #333;
+    border-radius: 10px;
+    color: white;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.search-cont {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+    .search-cont input {
+        width: 47%;
+        padding: 10px;
+        background-color: #353635;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 5px;
+    }
+
+.course-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.course-item {
+    display: flex;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    gap: 15px;
+}
+
+.course-image {
+    width: 100%;
+    max-width: 200px;
+    height: 150px; 
+    border-radius: 10px;
+    border: 2px solid white;
+    object-fit: cover;
+}
+
+
+.course-info {
+    flex-grow: 1;
+}
+
+.course-title {
+    font-size: 22px;
+    margin: 0;
+}
+
+.course-description {
+    font-size: 16px;
+    margin: 10px 0;
+    color: #ccc;
+    max-height: 60px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.course-dates {
+    font-size: 14px;
+    color: #888;
+}
+
+.course-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+    .course-status.approved {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .course-status.pending {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .course-status.rejected {
+        background-color: #dc3545;
+        color: white;
+    }
+
+.button-container {
+    display:flex;
+    justify-content:right;    
+}
+
+.edit-course-button, .add-lesson-button {
+    height: 30px;
+    background: white;
+    border: none;
+    color: black;
+    border-radius: 15px;
+    font-size: 14px;
+    transition: background-color linear 0.1s;
+    margin-left: 10px;
+}
+
+    .edit-course-button:hover, .add-lesson-button:hover {
+        background-color: silver;
+    }
