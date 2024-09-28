@@ -44,6 +44,14 @@ form {
     background-color: #353635;
 }
 
+.input-icon {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 90%;
+    top: 12%;
+}
+
 .input-data-textarea {
     width: 100%;
     color: white;

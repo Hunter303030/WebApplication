@@ -8,6 +8,7 @@ using WebApplication.ViewsPath;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly ILogger<ProfileController> _logger;
@@ -27,6 +28,7 @@ namespace WebApplication.Controllers
             _notificationService = notificationService;
         }
 
+        [AllowAnonymous]
         public IActionResult HandleNotification(string message, NotificationService.MessageType messageType, string viewPath, object? model = null)
         {
             _notificationService.Message(message, messageType);
@@ -38,12 +40,13 @@ namespace WebApplication.Controllers
             return View(viewPath);
         }
 
-
+        [AllowAnonymous]
         public IActionResult AuthView()
         {
             return View(ViewPaths.Profile.Auth);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
             if (profileAuthDto == null)
@@ -60,7 +63,7 @@ namespace WebApplication.Controllers
                     return HandleNotification("Неверная почта или пароль!", NotificationService.MessageType.Error, ViewPaths.Profile.Auth, profileAuthDto);
                 }
                 _notificationService.Message("Вы успешно вошли в аккаунт!", NotificationService.MessageType.Success);
-                return RedirectToAction("ListAll", "Course");
+                return RedirectToAction("ListAllView", "Course");
             }
             catch (Exception ex)
             {
@@ -69,7 +72,6 @@ namespace WebApplication.Controllers
             }
         }
 
-        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await _profileCookiesService.SignOutAsync();
@@ -77,11 +79,13 @@ namespace WebApplication.Controllers
             return RedirectToAction("AuthView");
         }
 
+        [AllowAnonymous]
         public IActionResult RegisterView()
         {
             return View(ViewPaths.Profile.Register);
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Register(ProfileRegisterDto profileRegisterDto)
         {
             if (profileRegisterDto == null)
@@ -109,7 +113,6 @@ namespace WebApplication.Controllers
             }            
         }
 
-        [Authorize]
         public async Task<IActionResult> EditView()
         {
             try
@@ -138,7 +141,6 @@ namespace WebApplication.Controllers
             }
         }
 
-        [Authorize]
         public async Task<IActionResult> Edit(ProfileEditDto profileEditDto)
         {
             if (profileEditDto == null)
@@ -172,13 +174,11 @@ namespace WebApplication.Controllers
             return View(ViewPaths.Profile.Edit, profileEditDto);
         }
 
-        [Authorize]
         public IActionResult EditPasswordView()
         {
             return View(ViewPaths.Profile.EditPassword);
         }
 
-        [Authorize]
         public async Task<IActionResult> EditPassword(ProfileEditPasswordDto profileEditPasswordDto)
         {
             if (profileEditPasswordDto == null)

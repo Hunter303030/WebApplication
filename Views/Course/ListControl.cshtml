@@ -11,33 +11,48 @@
         <div class="form-course">
             <h1 class="title">Список курсов</h1>
 
-            <div class="search-cont">
-                <input type="text" placeholder="Поиск по названию курса..." onkeyup="filterCourses()">
-                <input type="date" placeholder="Поиск по дате...">
-            </div>
-            @foreach (var item in Model)
+            <form asp-controller="Course" method="get">
+                <div class="search-cont">
+                    <input type="text" id="courseSearchInput" class="search-course" placeholder="Поиск по названию, цене или дате" onkeyup="filterCourses()" />
+                    <input asp-action="AddCourseView" type="submit" class="add-course-button" value="Добавить курс" />
+                </div>
+            </form>
+
+            @if (Model == null && Model.Count() == 0)
             {
-                <div class="course-list">
-                    <div class="course-item">
-                        <img src="~/Avatar/034530c6-459e-4e83-bc7e-c025655efe2f.jpg" alt="Course Image" class="course-image">
-                        <div class="course-info">
-                            <h2 class="course-title">Название курса</h2>
-                            <p class="course-description">Описание курса...</p>
-                            <p class="course-description">Цена: 10999</p>
-                            <p class="course-dates">
-                                Дата создания: 01.01.2023<br>
-                                Последнее обновление: 15.05.2023
-                            </p>
-                            <span class="course-status approved">Статус: Одобрен</span>
-                            <div class="button-container">
-                                <input type="submit" class="edit-course-button" value="Редактировать курс">
-                                <input type="submit" class="add-lesson-button" value="Добавить урок">
+                <h2 class="course-title">Список пуст</h2>
+            }
+            else
+            {
+                <div id="courseList">
+                    @foreach (var item in Model)
+                    {
+                        <div class="course-list">
+                            <div class="course-item">
+                                <img src="@Url.Content(item.PreviewUrl)" alt="Course Image" class="course-image">
+                                <div class="course-info">
+                                    <h2 class="course-title">Название курса: @item.Title</h2>
+                                    <p class="course-description">Описание курса: @item.Description</p>
+                                    <p class="course-description">Цена: @item.Price₽</p>
+                                    <p class="course-dates">
+                                        Дата создания: @item.DateCreate<br>
+                                        Последнее обновление: @item.DateUpdata
+                                    </p>
+                                    <span class="course-status" data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
+                                    <form asp-controller="Course" method="get">
+                                        <div class="button-container">
+                                            <input asp-action="EditCourseView" type="submit" class="edit-course-button" value="Редактировать курс">
+                                            <input asp-action="AddLessionView" type="submit" class="add-lesson-button" value="Добавить урок">
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    }
                 </div>
             }
         </div>
     </div>
+    <script src="~/js/Course/ListControl.js"></script>
 </body>
 </html>

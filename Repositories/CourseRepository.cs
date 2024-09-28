@@ -1,4 +1,5 @@
-﻿using WebApplication.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using WebApplication.Data;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 
@@ -13,10 +14,24 @@ namespace WebApplication.Repositories
             _context = context;
         }
 
-        public IEnumerable<Course> List()
+        public async Task<IEnumerable<Course>> ListAll()
         {
-            IEnumerable<Course> coursesList = _context.Course.ToList();
-            return coursesList;
+            var list = await _context.Course.Include(x=>x.StatusModeration).Where(x=>x.StatusModeration.Id == 1).ToListAsync();
+
+            if (list == null) return null;
+
+            return list;
+        }
+
+        public async Task<IEnumerable<Course>> ListControl(Guid profileId)
+        {
+            if (profileId == Guid.Empty) return null;
+
+            var list = await _context.Course.Include(x=>x.StatusModeration).Where(x=>x.Profile_Id == profileId).ToListAsync();
+
+            if (list == null) return null;
+
+            return list;
         }
 
         public async Task<bool> Add(Course course)

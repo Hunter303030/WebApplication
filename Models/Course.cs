@@ -5,7 +5,7 @@
         public Guid Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int Price { get; set; }
+        public Decimal Price { get; set; }
         public DateTime DateCreate { get; set; }
         public DateTime DateUpdata { get; set; }
         public string PreviewUrl { get; set; }
@@ -13,6 +13,6 @@
         public int Status_Id { get; set; }
 
         public Profile Profile { get; set; }
-        public Status Status { get; set; }
+        public StatusModeration StatusModeration { get; set; }
     }
 }

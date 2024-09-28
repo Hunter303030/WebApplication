@@ -8,6 +8,7 @@ using WebApplication.ViewsPath;
 
 namespace WebApplication.Controllers
 {
+    [Authorize]
     public class CourseController : Controller
     {
         private readonly ILogger<CourseController> _logger;
@@ -24,6 +25,7 @@ namespace WebApplication.Controllers
             _notificationService = notificationService;
         }
 
+        [AllowAnonymous]
         public IActionResult HandleNotification(string message, NotificationService.MessageType messageType, string viewPath, object? model = null)
         {
             _notificationService.Message(message, messageType);
@@ -35,25 +37,61 @@ namespace WebApplication.Controllers
             return View(viewPath);
         }
 
-        public IActionResult ListAll()
+        [AllowAnonymous]
+        public async Task<IActionResult> ListAllView()
         {
-            return View(ViewPaths.Course.ListAll);
+            try
+            {
+                var list = await _courseService.ListAll();
+
+                if (list == null)
+                {
+                    _logger.LogInformation("Список курсов пуст!");
+                    _notificationService.Message("Список курсов пуст!", NotificationService.MessageType.Error);
+                }
+                return View(ViewPaths.Course.ListAll/*, list*/);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении списка курсов!");
+                _notificationService.Message("Ошибка при получении списка курсов!", NotificationService.MessageType.Error);
+                return View(ViewPaths.Course.ListAll);
+            }
         }
 
-
-
-        public IActionResult ListControl()
+        public async Task<IActionResult> ListControlView()
         {
-            return View(ViewPaths.Course.ListControl);
+            var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (profileId == null)
+            {
+                return HandleNotification("Ошибка уникального индификатора пользователя!", NotificationService.MessageType.Error, ViewPaths.Course.ListAll);
+            }
+
+            try
+            {
+                var list = await _courseService.ListControl(Guid.Parse(profileId));
+
+                if (list == null)
+                {
+                    _logger.LogInformation("Список курсов пуст!");
+                    _notificationService.Message("Список курсов пуст!", NotificationService.MessageType.Error);
+                }
+                return View(ViewPaths.Course.ListControl,list);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ошибка при получении списка курсов!");
+                _notificationService.Message("Ошибка при получении списка курсов!", NotificationService.MessageType.Error);
+                return View(ViewPaths.Course.ListAll);
+            }
         }
 
-        [Authorize]
         public IActionResult AddCourseView()
         {
             return View(ViewPaths.Course.Add);
         }
 
-        [Authorize]
         public async Task<IActionResult> AddCourse(CourseAddDto courseAddDto)
         {
             try

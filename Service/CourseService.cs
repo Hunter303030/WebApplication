@@ -1,4 +1,5 @@
-﻿using WebApplication.Dto.Course;
+﻿using System.Collections;
+using WebApplication.Dto.Course;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service.Interfase;
@@ -14,6 +15,24 @@ namespace WebApplication.Service
         {
             _courseRepository = courseRepository;
             _appEnvironment = appEnvironment;
+        }
+
+        public async Task<IEnumerable<Course>> ListAll()
+        {
+            var list = await _courseRepository.ListAll();
+
+            if (list == null) return null;
+
+            return list;
+        }
+
+        public async Task<IEnumerable<Course>> ListControl(Guid profileId)
+        {
+            var list = await _courseRepository.ListControl(profileId);
+
+            if (list == null) return null;
+
+            return list;
         }
 
         public async Task<bool> Add(CourseAddDto courseAddDto, Guid profileId)
@@ -60,6 +79,6 @@ namespace WebApplication.Service
                 }
             }
             return false;
-        }
+        }        
     }
 }

@@ -18,19 +18,35 @@
     margin-bottom: 20px;
 }
 
-    .search-cont input {
-        width: 47%;
-        padding: 10px;
-        background-color: #353635;
-        border: 1px solid #333;
-        color: white;
-        border-radius: 5px;
+
+.search-course {
+    width: 70%;
+    padding: 10px;
+    background-color: #353635;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 15px;
+}
+
+.add-course-button {
+    height: 40px;
+    background: white;
+    border: none;
+    color: black;
+    border-radius: 15px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+    .add-course-button:hover {
+        background-color: #ccc;
     }
 
 .course-list {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    margin-bottom: 20px;
 }
 
 .course-item {
@@ -117,5 +133,5 @@
 }
 
     .edit-course-button:hover, .add-lesson-button:hover {
-        background-color: silver;
+        background-color: #ccc;
     }

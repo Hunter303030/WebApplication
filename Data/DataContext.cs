@@ -32,7 +32,7 @@ namespace WebApplication.Data
                 .HasForeignKey(x => x.Profile_Id);
 
             modelBuilder.Entity<Course>()
-                .HasOne(x => x.Status)
+                .HasOne(x => x.StatusModeration)
                 .WithMany(y => y.Courses)
                 .HasForeignKey(x => x.Status_Id);
         }
