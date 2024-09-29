@@ -115,7 +115,7 @@ namespace WebApplication.Controllers
                 if (cheack)
                 {
                     _notificationService.Message("Курс успешно создан!", NotificationService.MessageType.Success);
-                    return RedirectToAction("ListAll");
+                    return RedirectToAction("ListControlView");
                 }
                 else
                 {
@@ -130,6 +130,64 @@ namespace WebApplication.Controllers
                 _notificationService.Message("Произошла ошибка во время добавления курса!", NotificationService.MessageType.Error);
             }
             return View(ViewPaths.Course.Add);
+        }
+
+        public async Task<IActionResult> EditCourseView(Guid courseId)
+        {
+            try
+            {
+                if(courseId == Guid.Empty)
+                {
+                    _logger.LogError("Ошибка уникального индификатора курса!");
+                    _notificationService.Message("Ошибка уникального индификатора курса!", NotificationService.MessageType.Error);
+                    return RedirectToAction("ListControlView", "Course");
+                }
+                
+                var edit = await _courseService.GetCourse(courseId);
+
+                if(edit == null)
+                {
+                    _logger.LogError("Ошибка получения модели курса!");
+                    _notificationService.Message("Ошибка получения модели курса!", NotificationService.MessageType.Error);
+                    return RedirectToAction("ListControlView", "Course");
+                }
+
+                return View(ViewPaths.Course.Edit, edit);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Ошибка получения модели курса!");
+                _notificationService.Message("Ошибка получения модели курса!", NotificationService.MessageType.Error);
+                return RedirectToAction("ListControlView", "Course");
+            }
+        }
+
+        public async Task<IActionResult> EditCourse(CourseEditDto courseEditDto)
+        {
+            if(courseEditDto == null)
+            {
+                _logger.LogError("Ошибка модели редактирования курса!");
+                return HandleNotification("Ошибка модели редактирования курса!", NotificationService.MessageType.Error, ViewPaths.Course.Edit, courseEditDto);
+            }
+            try
+            {
+                bool cheak = await _courseService.Edit(courseEditDto);
+
+                if(cheak)
+                {
+                    _notificationService.Message("Изменения сохранены!", NotificationService.MessageType.Success);
+                }
+                else
+                {
+                    _notificationService.Message("Призошла ошибка при сохранении!", NotificationService.MessageType.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Ошибка редактирования курса!");
+                _notificationService.Message("Ошибка редактирования курса!", NotificationService.MessageType.Error);
+            }
+            return View(ViewPaths.Course.Edit, courseEditDto);
         }
     }
 }

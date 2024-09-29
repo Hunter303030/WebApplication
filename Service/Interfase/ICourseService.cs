@@ -6,7 +6,9 @@ namespace WebApplication.Service.Interfase
     public interface ICourseService
     {
         public Task<IEnumerable<Course>> ListAll();        
-        public Task<IEnumerable<Course>> ListControl(Guid profileId);        
-        public Task<bool> Add(CourseAddDto courseAddDto, Guid profileId);            
+        public Task<IEnumerable<Course>> ListControl(Guid profileId);
+        public Task<CourseEditDto> GetCourse(Guid courseId);
+        public Task<bool> Add(CourseAddDto courseAddDto, Guid profileId);
+        public Task<bool> Edit(CourseEditDto courseEditDto);
     }
 }

@@ -44,5 +44,25 @@ namespace WebApplication.Repositories
             }
             return false;
         }
+
+        public async Task<Course> GetCourse(Guid courseId)
+        {
+            if (courseId == Guid.Empty) return null;
+
+            var course = await _context.Course.Where(x => x.Id == courseId).FirstOrDefaultAsync();
+
+            if (course == null) return null;
+
+            return course;
+        }
+
+        public async Task<bool> Edit(Course course)
+        {
+            if(course == null) return false;
+
+            _context.Course.Update(course);
+            await _context.SaveChangesAsync();
+            return true;
+        }        
     }
 }

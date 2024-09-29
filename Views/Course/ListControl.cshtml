@@ -29,6 +29,10 @@
                     {
                         <div class="course-list">
                             <div class="course-item">
+                                <form asp-controller="Course" method="post">
+                                    <input class="delete-course-button" value="🗑">
+                                    <input asp-action="DeleteCourse" asp-for=@item.Id type="hidden" name="courseId" />
+                                </form>
                                 <img src="@Url.Content(item.PreviewUrl)" alt="Course Image" class="course-image">
                                 <div class="course-info">
                                     <h2 class="course-title">Название курса: @item.Title</h2>
@@ -40,6 +44,7 @@
                                     </p>
                                     <span class="course-status" data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
                                     <form asp-controller="Course" method="get">
+                                        <input type="hidden" name="courseId" value="@item.Id" />
                                         <div class="button-container">
                                             <input asp-action="EditCourseView" type="submit" class="edit-course-button" value="Редактировать курс">
                                             <input asp-action="AddLessionView" type="submit" class="add-lesson-button" value="Добавить урок">

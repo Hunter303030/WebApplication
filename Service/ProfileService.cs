@@ -91,44 +91,66 @@ namespace WebApplication.Service
         {
             if (profileEditDto == null || profileId == Guid.Empty) return false;
 
-            string filePath = "";
+            var userProfile = await _profileRepository.GetProfile(profileId);
+            if (userProfile == null) return false;
+
+            string newFilePath = "";
+            string oldFilePath = "";
+
             if (profileEditDto.Avatar != null)
             {
-                string folderPath = Path.Combine(_appEnvironment.WebRootPath, "Avatar");
-
-                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(profileEditDto.Avatar.FileName);
-                filePath = Path.Combine(folderPath, fileName);
-
-                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                string folderPath = Path.Combine(_appEnvironment.WebRootPath, "Avatar", profileId.ToString());
+                if (!Directory.Exists(folderPath))
                 {
-                    await profileEditDto.Avatar.CopyToAsync(fileStream);
+                    Directory.CreateDirectory(folderPath);
                 }
-                profileEditDto.ImageUrl = "/Avatar/" + fileName;
+
+                string fileName = Guid.NewGuid() + Path.GetExtension(profileEditDto.Avatar.FileName);
+                newFilePath = Path.Combine(folderPath, fileName);
+
+                if (!string.IsNullOrEmpty(userProfile.ImageUrl))
+                {
+                    oldFilePath = Path.Combine(_appEnvironment.WebRootPath, userProfile.ImageUrl.TrimStart('/'));
+                }
+
+                profileEditDto.ImageUrl = $"/Avatar/{profileId}/" + fileName;
             }
-
-            var userProfile = await _profileRepository.GetProfile(profileId);
-
-            if (userProfile == null) return false;
 
             _mapper.Map(profileEditDto, userProfile);
 
-            bool cheack = await _profileRepository.Edit(userProfile);
+            bool isUpdated = await _profileRepository.Edit(userProfile);
 
-            if (cheack)
+            if (isUpdated)
             {
+                if (!string.IsNullOrEmpty(newFilePath))
+                {
+                    using (var fileStream = new FileStream(newFilePath, FileMode.Create))
+                    {
+                        await profileEditDto.Avatar.CopyToAsync(fileStream);
+                    }
+
+                    if (!string.IsNullOrEmpty(oldFilePath) && File.Exists(oldFilePath))
+                    {
+                        File.Delete(oldFilePath);
+                    }
+                }
+
                 var profileCookies = _mapper.Map<ProfileCookiesDto>(userProfile);
                 await _profileCookiesService.SignInAsync(profileCookies);
+
                 return true;
             }
             else
             {
-                if (filePath != "")
+                if (!string.IsNullOrEmpty(newFilePath) && File.Exists(newFilePath))
                 {
-                    File.Delete(filePath);
+                    File.Delete(newFilePath);
                 }
+
                 return false;
             }
         }
+
 
         public async Task<bool> EditPassword(ProfileEditPasswordDto profileEditPasswordDto, Guid profileId)
         {
