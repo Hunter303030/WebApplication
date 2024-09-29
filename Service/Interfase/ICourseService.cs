@@ -10,5 +10,6 @@ namespace WebApplication.Service.Interfase
         public Task<CourseEditDto> GetCourse(Guid courseId);
         public Task<bool> Add(CourseAddDto courseAddDto, Guid profileId);
         public Task<bool> Edit(CourseEditDto courseEditDto);
+        public Task<bool> Delete(Guid courseId);
     }
 }

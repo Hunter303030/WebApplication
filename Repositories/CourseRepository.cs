@@ -64,5 +64,15 @@ namespace WebApplication.Repositories
             await _context.SaveChangesAsync();
             return true;
         }        
+
+        public async Task<bool> Delete(Course course)
+        {
+            if (course == null) return false;
+
+            _context.Course.Remove(course);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

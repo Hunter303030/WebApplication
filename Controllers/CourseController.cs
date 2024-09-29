@@ -189,5 +189,35 @@ namespace WebApplication.Controllers
             }
             return View(ViewPaths.Course.Edit, courseEditDto);
         }
+
+        public async Task<IActionResult> DeleteCourse(Guid courseId)
+        {
+            if(courseId == Guid.Empty)
+            {
+                _logger.LogError("Ошибка уникального индификатора курса!");
+                _notificationService.Message("Ошибка уникального индификатора курса!", NotificationService.MessageType.Error);
+                return RedirectToAction("ListControlView", "Course");
+            }
+
+            try
+            {
+                bool isDelete = await _courseService.Delete(courseId);
+
+                if(isDelete)
+                {
+                    _notificationService.Message("Курс успешно удален!", NotificationService.MessageType.Success);
+                }
+                else
+                {
+                    _notificationService.Message("Произошла ошибка при удалении курса!", NotificationService.MessageType.Error);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Ошибка удаления курса!");
+                _notificationService.Message("Ошибка удаления курса!", NotificationService.MessageType.Error);
+            }
+            return RedirectToAction("ListControlView", "Course");
+        }
     }
 }

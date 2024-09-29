@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using WebApplication.Dto.Course;
-using WebApplication.Dto.Profile;
+﻿using WebApplication.Dto.Course;
 using WebApplication.Models;
 using WebApplication.Repositories.Interfaces;
 using WebApplication.Service.Interfase;
@@ -117,12 +115,12 @@ namespace WebApplication.Service
                 {
                     Directory.CreateDirectory(folderPath);
                 }
-                
+
                 string fileName = courseEditDto.Id.ToString() + Path.GetExtension(courseEditDto.Preview.FileName);
                 newFilePath = Path.Combine(folderPath, fileName);
-                
+
                 courseEditDto.PreviewUrl = $"/Course/{courseEditDto.Id}/" + fileName;
-                
+
                 if (System.IO.File.Exists(oldFilePath))
                 {
                     System.IO.File.Delete(oldFilePath);
@@ -145,5 +143,25 @@ namespace WebApplication.Service
             return true;
         }
 
+        public async Task<bool> Delete(Guid courseId)
+        {
+            if (courseId == Guid.Empty) return false;
+
+            var delete = await _courseRepository.GetCourse(courseId);
+            if (delete == null) return false;
+
+            string folderPath = Path.Combine(_appEnvironment.WebRootPath, "Course", delete.Id.ToString());
+
+            bool isDelete = await _courseRepository.Delete(delete);
+
+            if (!isDelete) return false;
+
+            if (Directory.Exists(folderPath))
+            {
+                Directory.Delete(folderPath, recursive: true);
+            }
+
+            return true;
+        }
     }
 }

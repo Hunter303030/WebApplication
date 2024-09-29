@@ -10,5 +10,6 @@ namespace WebApplication.Repositories.Interfaces
         public Task<bool> Add(Course course);
         public Task<bool> Edit(Course course);
         public Task<Course> GetCourse(Guid courseId);
+        public Task<bool> Delete(Course course);
     }
 }
