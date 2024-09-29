@@ -18,7 +18,7 @@
                 </div>
             </form>
 
-            @if (Model == null && Model.Count() == 0)
+            @if (Model == null || !Model.Any())
             {
                 <h2 class="course-title">Список пуст</h2>
             }
@@ -43,11 +43,11 @@
                                         Последнее обновление: @item.DateUpdata
                                     </p>
                                     <span class="course-status" data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
-                                    <form asp-controller="Course" method="get">
+                                    <form method="post">
                                         <input type="hidden" name="courseId" value="@item.Id" />
                                         <div class="button-container">
-                                            <input asp-action="EditCourseView" type="submit" class="edit-course-button" value="Редактировать курс">
-                                            <input asp-action="AddLessionView" type="submit" class="add-lesson-button" value="Добавить урок">
+                                            <input asp-action="EditCourseView" asp-controller="Course" type="submit" class="edit-course-button" value="Редактировать курс">
+                                            <input asp-action="ListLessionView" asp-controller="Lession" type="submit" class="add-lesson-button" value="Список урок">
                                         </div>
                                     </form>
                                 </div>
