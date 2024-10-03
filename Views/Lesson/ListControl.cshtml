@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Lesson>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Список уроков</title>
+    <link rel="stylesheet" href="~/css/Lesson/ListControl.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</head>
+<body>
+    <div class="cont">
+        <div class="form-lesson">
+            <h1 class="title">Список уроков</h1>
+
+            <form asp-controller="Lesson" method="get">
+                <div class="search-cont">
+                    <input type="text" id="lessonSearchInput" class="search-lesson" placeholder="Поиск по названию" onkeyup="filterLessons()" />
+                </div>
+            </form>
+
+            <button class="add-new-lesson-button" onclick="addNewLessonForm()">+</button>
+            <div class="form-data">
+                <form method="post" asp-controller="Course" enctype="multipart/form-data">
+                    <label class="title">Создать курс</label>
+                    <div class="input-box">
+                        <span class="input-title">Название</span>
+                        <img class="input-icon" src="~/Image/icon-header.png" alt="Alternate Text" />
+                        <input class="input-data" type="text" required />
+                    </div>
+                    <div class="input-box">
+                        <span class="input-title">Описание</span>
+                        <textarea class="input-data-textarea" required"></textarea>
+                    </div>                    
+                    <div class="input-box">
+                        <span class="input-title">Превью</span>
+                        <img id="current-avatar" class="preview" alt="" />
+                    </div>
+                    <div class="input-box">
+                        <label for="fileInput" class="custom-file-upload">
+                            Выберите файл
+                        </label>
+                        <input type="file" id="fileInput" class="file-input" accept="video/*">
+                        <label id="file-name">Файл не выбран</label>
+                    </div>
+                    <input asp-action="AddCourse" class="btn-add" type="submit" value="Добавить" />
+                </form>
+            </div>
+
+            <div id="lessonList">
+                @if (Model == null || !Model.Any())
+                {
+                    <h2 class="lesson-title">Список пуст</h2>
+                }
+                else
+                {
+                    @foreach (var item in Model)
+                    {
+                        <div class="lesson-list">
+                            <div class="lesson-item">
+                                <!-- Существующие уроки -->
+                                <h2 class="lesson-title">Название урока: @item.Title</h2>
+                                <p class="lesson-description">Описание урока: @item.Description</p>
+                                <video class="lesson-video" controls>
+                                    <source src="@Url.Content(item.ContentUrl)" type="video/mp4">
+                                    Ваш браузер не поддерживает видео.
+                                </video>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <script src="~/js/Lesson/ListControl.js"></script>
+</body>
+</html>

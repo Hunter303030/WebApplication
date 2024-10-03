@@ -5,11 +5,11 @@
     <title>Создание курса</title>
     <link rel="stylesheet" href="~/css/Course/Add.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body>
-    <div class="form-auth">
+    <div class="form-add-course">
         <div class="cont">
             <div class="form-data">
                 <form method="post" asp-controller="Course" enctype="multipart/form-data">
@@ -20,26 +20,23 @@
                         <input asp-for="Title" class="input-data" type="text" required />
                     </div>
                     <div class="input-box">
-                        <span class="input-title">Описание</span>
+                        <span class="input-title textarea-title">Описание</span>
                         <textarea asp-for=Description class="input-data-textarea" required"></textarea>
                     </div>
                     <div class="input-box">
                         <span class="input-title">Цена ₽</span>
-                        <input id="price-input" class="input-data" type="text" placeholder="₽" required />
                         <img class="input-icon" src="~/Image/icon-ruble.png" alt="Alternate Text" />
-                        <input asp-for="Price" id="price-hidden" type="hidden" />
+                        <input asp-for="Price" id="price-input" class="input-data" type="text" placeholder="₽" required />
                     </div>
                     <div class="input-box">
-                        <span class="input-title">Превью</span>
-                        <img id="current-avatar" class="preview" alt="" />
+                        <img id="current-preview" class="preview" alt="Превью" />
                     </div>
                     <div class="input-box">
-                        <label for="fileInput" class="custom-file-upload">
-                            Выберите файл
-                        </label>
-                        <input asp-for=Preview type="file" id="fileInput" class="file-input" accept="image/*">
+                        <label for="fileInput" class="custom-file-upload"> Выберите файл</label>
+                        <input asp-for="Preview" type="file" id="fileInput" class="file-input" accept="image/*">
                         <label id="file-name">Файл не выбран</label>
                     </div>
+
                     <input asp-action="AddCourse" class="btn-add" type="submit" value="Добавить" />
                 </form>
             </div>

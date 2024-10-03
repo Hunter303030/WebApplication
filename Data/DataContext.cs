@@ -13,8 +13,8 @@ namespace WebApplication.Data
         public DbSet<Profile> Profile { get; set; }
         public DbSet<Course> Course { get; set; }
         public DbSet<CommentCourse> CommentCourse { get; set; }
-        public DbSet<Lession> Lession { get; set; }
-        public DbSet<CommentLession> CommentLession { get; set; }
+        public DbSet<Lesson> Lesson { get; set; }
+        public DbSet<CommentLesson> CommentLesson { get; set; }
         public DbSet<Role> Role { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

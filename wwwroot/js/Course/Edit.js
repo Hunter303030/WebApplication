@@ -1,34 +1,16 @@
-﻿$(document).ready(function () {
-    $('#price-input').on('input', function (e) {
-        let value = $(this).val().replace(/[^\d]/g, '');
+﻿document.addEventListener('DOMContentLoaded', function () {
+    const priceInput = document.getElementById('price-input');
+
+    priceInput.addEventListener('input', function (e) {
+        let value = this.value.replace(/\D/g, '');
+
         if (value.length > 6) {
             value = value.slice(0, 6);
         }
 
-        if (value.length > 0) {
-            $(this).val('₽ ' + value);
-        } else {
-            $(this).val('');
-        }
-
-        $('#price-hidden').val(value);
-    });
-
-    $('#price-input').on('focus', function () {
-        let value = $(this).val();
-        if (value === '₽ ') {
-            $(this).val('');
-        }
-    });
-
-    $('#price-input').on('blur', function () {
-        let value = $(this).val();
-        if (value === '') {
-            $(this).val('₽ ');
-        }
+        this.value = value;
     });
 });
-
 
 document.getElementById('fileInput').addEventListener('change', function () {
     var fileName = this.files[0] ? this.files[0].name : "Файл не выбран";
@@ -37,10 +19,10 @@ document.getElementById('fileInput').addEventListener('change', function () {
 
 const fileInput = document.getElementById('fileInput');
 const fileNameLabel = document.getElementById('file-name');
-const currentAvatar = document.getElementById('current-avatar');
-const resetAvatarButton = document.getElementById('resetAvatar');
+const currentPreview = document.getElementById('current-preview');
+const resetPreviewButton = document.getElementById('resetPreview');
 
-let originalAvatarSrc = currentAvatar.src;
+let originalPreviewSrc = currentPreview.src;
 
 fileInput.addEventListener('change', function () {
     const file = this.files[0];
@@ -50,7 +32,7 @@ fileInput.addEventListener('change', function () {
 
         const reader = new FileReader();
         reader.onload = function (e) {
-            currentAvatar.src = e.target.result;
+            currentPreview.src = e.target.result;
         };
         reader.readAsDataURL(file);
     } else {
@@ -58,8 +40,8 @@ fileInput.addEventListener('change', function () {
     }
 });
 
-resetAvatarButton.addEventListener('click', function () {
-    currentAvatar.src = originalAvatarSrc;
+resetPreviewButton.addEventListener('click', function () {
+    currentPreview.src = originalPreviewSrc;
     fileInput.value = '';
     fileNameLabel.textContent = "Файл не выбран";
 });

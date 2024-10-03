@@ -18,10 +18,9 @@
             public const string Register = "~/Views/Profile/Register.cshtml";
         }
 
-        public static class Lession
+        public static class Lesson
         {
-            public const string ListContor = "~/Views/Lession/ListControl.cshtml"; 
-            public const string Add = "~/Views/Lession/Add.cshtml"; 
+            public const string ListContor = "~/Views/Lesson/ListControl.cshtml"; 
         }
     }
 }

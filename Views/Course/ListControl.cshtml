@@ -5,6 +5,8 @@
     <title>Список курсов</title>
     <link rel="stylesheet" href="~/css/Course/ListControl.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body>
     <div class="cont">
@@ -42,12 +44,12 @@
                                         Дата создания: @item.DateCreate<br>
                                         Последнее обновление: @item.DateUpdata
                                     </p>
-                                    <span class="course-status" data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
+                                    <span id="course-status" class="course-status " data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
                                     <form method="post">
-                                        <input type="hidden" name="courseId" value="@item.Id" />
+                                        <input type="hidden" name="courseId" asp-for="@item.Id" />
                                         <div class="button-container">
                                             <input asp-action="EditCourseView" asp-controller="Course" type="submit" class="edit-course-button" value="Редактировать курс">
-                                            <input asp-action="ListLessionView" asp-controller="Lession" type="submit" class="add-lesson-button" value="Список урок">
+                                            <input asp-action="ListLessonView" asp-controller="Lesson" type="submit" class="add-lesson-button" value="Список уроков">
                                         </div>
                                     </form>
                                 </div>

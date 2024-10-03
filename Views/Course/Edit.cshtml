@@ -5,11 +5,11 @@
     <title>Редактирование курса</title>
     <link rel="stylesheet" href="~/css/Course/Edit.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
 </head>
 <body>
-    <div class="form-auth">
+    <div class="form-edit-course">
         <div class="cont">
             <div class="form-data">
                 <form method="post" asp-controller="Course" enctype="multipart/form-data">
@@ -17,35 +17,31 @@
                     <input asp-for=@Model.PreviewUrl type="hidden"/>
                     <label class="title">Редактировать курс</label>
                     <div class="input-box">
-                        <span class="input-title">Название</span>
                         <img class="input-icon" src="~/Image/icon-header.png" alt="Alternate Text" />
                         <input asp-for="@Model.Title" class="input-data" type="text" required />
+                        <span class="input-title">Название</span>
                     </div>
                     <div class="input-box">
-                        <span class="input-title">Описание</span>
+                        <span class="input-title textarea-title">Описание</span>
                         <textarea asp-for=@Model.Description class="input-data-textarea" required"></textarea>
                     </div>
                     <div class="input-box">
                         <span class="input-title">Цена ₽</span>
-                        <input id="price-input" class="input-data" type="text" value="@Model.Price" placeholder="₽" required />
                         <img class="input-icon" src="~/Image/icon-ruble.png" alt="Alternate Text" />
-                        <input asp-for="@Model.Price" id="price-hidden" type="hidden" />
+                        <input asp-for="Price" id="price-input" class="input-data" type="text" placeholder="₽" required />
                     </div>
                     <div class="input-box">
-                        <span class="input-title">Превью</span>
-                        <img src="@Url.Content(Model.PreviewUrl)" id="current-avatar" class="preview" alt="" />
-                    </div>
+                        <img src="@Url.Content(Model.PreviewUrl)" id="current-preview" class="preview" alt="" />
+                    </div>                    
                     <div class="input-box">
-                        <label for="fileInput" class="custom-file-upload">
-                            Выберите файл
-                        </label>
-                        <input asp-for=Preview type="file" id="fileInput" class="file-input" accept="image/*">
+                        <label for="fileInput" class="custom-file-upload"> Выберите файл</label>
+                        <input asp-for="Preview" type="file" id="fileInput" class="file-input" accept="image/*">
                         <label id="file-name">Файл не выбран</label>
                     </div>
                     <div class="input-box">
-                        <button type="button" id="resetAvatar">Вернуть исходное превью</button>
+                        <button type="button" id="resetPreview">Вернуть исходное превью</button>
                     </div>                    
-                    <input asp-action="EditCourse" class="btn-add" type="submit" value="Сохранить" />
+                    <input asp-action="EditCourse" class="btn-edit" type="submit" value="Сохранить" />
                 </form>
             </div>
         </div>
