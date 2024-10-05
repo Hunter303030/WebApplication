@@ -1,26 +1,20 @@
-﻿function filterCourses() {
-    var input = document.getElementById('courseSearchInput');
+﻿function filterLessons() {
+    var input = document.getElementById('lessonSearchInput');
     var filter = input.value.toLowerCase();
 
-    var courseList = document.getElementById('courseList');
-    var courses = courseList.getElementsByClassName('course-item');
+    var lessonList = document.getElementById('lessonList');
+    var lessons = lessonList.getElementsByClassName('lesson-item');
 
-    for (var i = 0; i < courses.length; i++) {
-        var courseTitle = courses[i].getElementsByClassName('course-title')[0];
-        var coursePrice = courses[i].getElementsByClassName('course-description')[1];
-        var courseDate = courses[i].getElementsByClassName('course-dates')[0];
+    for (var i = 0; i < lessons.length; i++) {
+        var lessonTitle = lessons[i].getElementsByClassName('lesson-title')[0];
 
-        if (courseTitle && coursePrice && courseDate) {
-            var titleText = courseTitle.textContent || courseTitle.innerText;
-            var priceText = coursePrice.textContent || coursePrice.innerText;
-            var dateText = courseDate.textContent || courseDate.innerText;
+        if (lessonTitle && lessonPrice && lessonDate) {
+            var titleText = lessonTitle.textContent || lessonTitle.innerText;
 
-            if (titleText.toLowerCase().indexOf(filter) > -1 ||
-                priceText.toLowerCase().indexOf(filter) > -1 ||
-                dateText.toLowerCase().indexOf(filter) > -1) {
-                courses[i].style.display = '';
+            if (titleText.toLowerCase().indexOf(filter) > -1) {
+                lessons[i].style.display = '';
             } else {
-                courses[i].style.display = 'none';
+                lessons[i].style.display = 'none';
             }
         }
     }
@@ -29,55 +23,104 @@
 let lessonCount = 0;
 
 function addNewLessonForm() {
-    lessonCount++;
-
-    const form = `
-                <div id="lessonForm${lessonCount}" class="lesson-form">
-                    <h2>Новый урок</h2>                    
-                    <label>Название:</label>
-                    <input type="text" id="lessonTitle${lessonCount}" class="lesson-title" /><br />
-                    <label>Описание:</label>
-                    <input type="text" id="lessonDescription${lessonCount}" class="lesson-description" /><br />
-                    <label>Ссылка на видео:</label>
-                    <input type="text" id="lessonContent${lessonCount}" class="lesson-content" /><br />
-
-                    <button class="save-lesson-button" onclick="saveLesson(${lessonCount})">Сохранить</button>
-                    <button class="delete-lesson-button" onclick="deleteLessonForm(${lessonCount})">Удалить</button>
+    const lessonList = document.getElementById('lessonList');
+    if (lessonList) {
+        lessonCount++;
+        if (lessonCount == 1) {
+            const form = ` 
+            <div class="form-data" id="lessonForm${lessonCount}">
+            <div class="cont">
+            <form method="post" action="/Lesson/AddLesson"  enctype="multipart/form-data">
+                <label class="title">Создать урок</label>
+                <div class="input-box">
+                    <span class="input-title">Название</span>
+                    <input name="Title" class="input-data" type="text" required />
                 </div>
-            `;
+                <div class="input-box">
+                    <span class="input-title textarea-title">Описание</span>
+                    <textarea name="Description" class="input-data-textarea" required></textarea>
+                </div>
 
-    document.getElementById('lessonList').insertAdjacentHTML('beforeend', form);
+                <div id="progressContainer${lessonCount}" class="progress-container" style="display:none;">
+                    <progress id="progressBar${lessonCount}" value="0" max="100"></progress>
+                    <span id="progressText${lessonCount}">0%</span>
+                </div>            
+
+                <div class="input-box">
+                    <label for="fileInput${lessonCount}" class="custom-file-upload">Выберите видео</label>
+                    <input name="Content" type="file" id="fileInput${lessonCount}" class="file-input" accept="video/*" onchange="handleVideoUpload(${lessonCount})" required>
+                    <label id="file-name${lessonCount}">Файл не выбран</label>
+                </div>
+
+                <video id="lessonVideo${lessonCount}" controls="controls" class="lesson-video" style="display:none;">
+                    <source id="videoSource${lessonCount}" src="" type="video/mp4" />
+                </video>
+
+                <input type="submit" class="btn" value="Добавить урок"/>
+                <button type="button" class="btn" onclick="deleteLessonForm(${lessonCount})">Удалить форму</button>
+        </form>
+    </div>
+</div>
+            `;
+            lessonList.insertAdjacentHTML('beforeend', form);
+
+            const videoElement = document.getElementById(`lessonVideo${lessonCount}`);
+            videoElement.style.display = 'block';
+           
+            setTimeout(() => {
+                document.querySelector(`#lessonForm${lessonCount}`).classList.add('show');
+            }, 500);
+        }
+    }
 }
 
 function deleteLessonForm(id) {
     const form = document.getElementById(`lessonForm${id}`);
     if (form) {
-        form.remove();
+        lessonCount = 0;
+        form.classList.add('hide');
+       
+        setTimeout(() => {
+            form.remove();
+        }, 500);
     }
 }
 
-function saveLesson(id) {
-    const lessonTitle = document.getElementById(`lessonTitle${id}`).value;
-    const lessonDescription = document.getElementById(`lessonDescription${id}`).value;
-    const lessonContent = document.getElementById(`lessonContent${id}`).value;
+function handleVideoUpload(lessonCount) {
+    const fileInput = document.getElementById(`fileInput${lessonCount}`);
+    const videoSource = document.getElementById(`videoSource${lessonCount}`);
+    const lessonVideo = document.getElementById(`lessonVideo${lessonCount}`);
+    const fileNameLabel = document.getElementById(`file-name${lessonCount}`);
+    const progressContainer = document.getElementById(`progressContainer${lessonCount}`);
+    const progressBar = document.getElementById(`progressBar${lessonCount}`);
+    const progressText = document.getElementById(`progressText${lessonCount}`);
 
-    const lessonData = {
-        Title: lessonTitle,
-        Description: lessonDescription,
-        Content: lessonContent
-    };
+    const file = fileInput.files[0];
+    if (file) {
+        fileNameLabel.textContent = file.name;
 
-    $.ajax({
-        url: '/Lesson/AddLesson',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify(lessonData),
-        success: function (response) {
-            alert('Урок успешно сохранён!');
-            deleteLessonForm(id);
-        },
-        error: function () {
-            alert('Ошибка при сохранении урока.');
-        }
-    });
+        progressContainer.style.display = 'block';
+
+        const reader = new FileReader();
+        reader.onprogress = function (event) {
+            if (event.lengthComputable) {
+                const percentLoaded = Math.round((event.loaded / event.total) * 100);
+                progressBar.value = percentLoaded;
+                progressText.textContent = `${percentLoaded}%`;
+            }
+        };
+
+        reader.onloadend = function () {
+            videoSource.src = URL.createObjectURL(file);
+            lessonVideo.style.display = 'block';
+            progressContainer.style.display = 'none';
+            lessonVideo.load();
+        };
+
+        reader.onerror = function () {
+            alert('Ошибка при загрузке видео.');
+        };
+
+        reader.readAsDataURL(file);
+    }
 }

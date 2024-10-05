@@ -12,64 +12,46 @@
     <div class="cont">
         <div class="form-lesson">
             <h1 class="title">Список уроков</h1>
-
-            <form asp-controller="Lesson" method="get">
+            <form asp-controller="lesson" method="get">
                 <div class="search-cont">
                     <input type="text" id="lessonSearchInput" class="search-lesson" placeholder="Поиск по названию" onkeyup="filterLessons()" />
                 </div>
             </form>
 
-            <button class="add-new-lesson-button" onclick="addNewLessonForm()">+</button>
-            <div class="form-data">
-                <form method="post" asp-controller="Course" enctype="multipart/form-data">
-                    <label class="title">Создать курс</label>
-                    <div class="input-box">
-                        <span class="input-title">Название</span>
-                        <img class="input-icon" src="~/Image/icon-header.png" alt="Alternate Text" />
-                        <input class="input-data" type="text" required />
-                    </div>
-                    <div class="input-box">
-                        <span class="input-title">Описание</span>
-                        <textarea class="input-data-textarea" required"></textarea>
-                    </div>                    
-                    <div class="input-box">
-                        <span class="input-title">Превью</span>
-                        <img id="current-avatar" class="preview" alt="" />
-                    </div>
-                    <div class="input-box">
-                        <label for="fileInput" class="custom-file-upload">
-                            Выберите файл
-                        </label>
-                        <input type="file" id="fileInput" class="file-input" accept="video/*">
-                        <label id="file-name">Файл не выбран</label>
-                    </div>
-                    <input asp-action="AddCourse" class="btn-add" type="submit" value="Добавить" />
-                </form>
-            </div>
-
-            <div id="lessonList">
-                @if (Model == null || !Model.Any())
+            @if (Model == null || !Model.Any())
+            {
+                <h2 class="lesson-title">Список пуст</h2>
+            }
+            else
+            {
+                @foreach (var item in Model)
                 {
-                    <h2 class="lesson-title">Список пуст</h2>
-                }
-                else
-                {
-                    @foreach (var item in Model)
-                    {
-                        <div class="lesson-list">
-                            <div class="lesson-item">
-                                <!-- Существующие уроки -->
-                                <h2 class="lesson-title">Название урока: @item.Title</h2>
-                                <p class="lesson-description">Описание урока: @item.Description</p>
-                                <video class="lesson-video" controls>
-                                    <source src="@Url.Content(item.ContentUrl)" type="video/mp4">
-                                    Ваш браузер не поддерживает видео.
-                                </video>
+                    <div class="lesson-list">
+                        <div class="lesson-item">
+                            <form asp-controller="Lesson" method="post">
+                                <input asp-for=@item.Id type="hidden" name="lessonId" />
+                                <input asp-action="DeleteLesson" type="submit" class="delete-lesson-button" value="🗑">
+                            </form>
+                            <video controls="controls" class="lesson-image">
+                                <source src="@Url.Content(item.ContentUrl)" type="video/mp4" />
+                            </video>
+                            <div class="lesson-info">
+                                <h2 class="lesson-title">Название курса: @item.Title</h2>
+                                <p class="lesson-description">Описание курса: @item.Description</p>
+                                <form method="post">
+                                    <input type="hidden" name="lessonId" asp-for="@item.Id" />
+                                    <div class="button-container">
+                                        <input asp-action="EditLessonView" asp-controller="Lesson" type="submit" class="edit-lesson-button" value="Редактировать урок">
+                                    </div>
+                                </form>
                             </div>
                         </div>
-                    }
+                    </div>
                 }
-            </div>
+            }
+            <div id="lessonList"></div>
+            <button class="lesson-add" type="submit" onclick="addNewLessonForm()"><img src="~/Image/icon-plus.png" alt="+" /></button>
+
         </div>
     </div>
     <script src="~/js/Lesson/ListControl.js"></script>

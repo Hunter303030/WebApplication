@@ -14,23 +14,29 @@
     });
 });
 
-function filterLessons() {
-    var input = document.getElementById('lessonSearchInput');
+function filterCourses() {
+    var input = document.getElementById('courseSearchInput');
     var filter = input.value.toLowerCase();
 
-    var lessonList = document.getElementById('lessonList');
-    var lessons = lessonList.getElementsByClassName('lesson-item');
+    var courseList = document.getElementById('courseList');
+    var courses = courseList.getElementsByClassName('course-item');
 
-    for (var i = 0; i < lessons.length; i++) {
-        var lessonTitle = lessons[i].getElementsByClassName('lesson-title')[0];
+    for (var i = 0; i < courses.length; i++) {
+        var courseTitle = courses[i].getElementsByClassName('course-title')[0];
+        var coursePrice = courses[i].getElementsByClassName('course-description')[1];
+        var courseDate = courses[i].getElementsByClassName('course-dates')[0];
 
-        if (lessonTitle) {
-            var titleText = lessonTitle.textContent || lessonTitle.innerText;
+        if (courseTitle && coursePrice && courseDate) {
+            var titleText = courseTitle.textContent || courseTitle.innerText;
+            var priceText = coursePrice.textContent || coursePrice.innerText;
+            var dateText = courseDate.textContent || courseDate.innerText;
 
-            if (titleText.toLowerCase().indexOf(filter) > -1) {
-                lessons[i].style.display = '';
+            if (titleText.toLowerCase().indexOf(filter) > -1 ||
+                priceText.toLowerCase().indexOf(filter) > -1 ||
+                dateText.toLowerCase().indexOf(filter) > -1) {
+                courses[i].style.display = '';
             } else {
-                lessons[i].style.display = 'none';
+                courses[i].style.display = 'none';
             }
         }
     }
