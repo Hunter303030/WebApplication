@@ -89,7 +89,14 @@ namespace WebApplication.Controllers
 
         public IActionResult AddCourseView()
         {
-            return View(ViewPaths.Course.Add);
+            try
+            {
+                return View(ViewPaths.Course.Add);
+            }
+            catch
+            {
+                return View(ViewPaths.Error.NotFound);
+            }
         }
 
         public async Task<IActionResult> AddCourse(CourseAddDto courseAddDto)
@@ -184,7 +191,7 @@ namespace WebApplication.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError("Ошибка редактирования курса!");
+                _logger.LogError(ex,"Ошибка редактирования курса!");
                 _notificationService.Message("Ошибка редактирования курса!", NotificationService.MessageType.Error);
             }
             return View(ViewPaths.Course.Edit, courseEditDto);
@@ -214,7 +221,7 @@ namespace WebApplication.Controllers
             }
             catch(Exception ex)
             {
-                _logger.LogError("Ошибка удаления курса!");
+                _logger.LogError(ex,"Ошибка удаления курса!");
                 _notificationService.Message("Ошибка удаления курса!", NotificationService.MessageType.Error);
             }
             return RedirectToAction("ListControlView", "Course");

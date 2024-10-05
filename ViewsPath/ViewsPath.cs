@@ -22,5 +22,10 @@
         {
             public const string ListContor = "~/Views/Lesson/ListControl.cshtml"; 
         }
+
+        public static class Error
+        {
+            public const string NotFound = "~/Views/Shared/_NotFound.cshtml";
+        }
     }
 }

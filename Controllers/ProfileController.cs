@@ -43,7 +43,14 @@ namespace WebApplication.Controllers
         [AllowAnonymous]
         public IActionResult AuthView()
         {
-            return View(ViewPaths.Profile.Auth);
+            try
+            {
+                return View(ViewPaths.Profile.Auth);
+            }
+            catch
+            {
+                return View(ViewPaths.Error.NotFound);
+            }
         }
 
         [AllowAnonymous]
@@ -82,7 +89,14 @@ namespace WebApplication.Controllers
         [AllowAnonymous]
         public IActionResult RegisterView()
         {
-            return View(ViewPaths.Profile.Register);
+            try
+            {
+                return View(ViewPaths.Profile.Register);
+            }
+            catch
+            {
+                return View(ViewPaths.Error.NotFound);
+            }
         }
 
         [AllowAnonymous]
@@ -110,7 +124,7 @@ namespace WebApplication.Controllers
                 _logger.LogError(ex, "Ошибка регистрации!");
                 return HandleNotification("Ошибка регистрации!", NotificationService.MessageType.Error, ViewPaths.Profile.Register, profileRegisterDto);
 
-            }            
+            }
         }
 
         public async Task<IActionResult> EditView()
@@ -126,7 +140,7 @@ namespace WebApplication.Controllers
                 }
 
                 var profileEdit = await _profileService.GetProfileForEdit(Guid.Parse(profileId));
-                if(profileEdit == null)
+                if (profileEdit == null)
                 {
                     _notificationService.Message("Произошла ошибка при вызове формы редактирования!", NotificationService.MessageType.Error);
                     return RedirectToAction("List", "Course");

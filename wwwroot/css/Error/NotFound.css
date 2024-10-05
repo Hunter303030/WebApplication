@@ -1,0 +1,13 @@
+﻿.form-lesson {
+    border: 2px solid #333;
+    border-radius: 10px;
+    color: white;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+}
+
+.title {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
