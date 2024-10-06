@@ -38,6 +38,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
         public async Task<IActionResult> ListAllView()
         {
             try
@@ -59,6 +60,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> ListControlView()
         {
             var profileId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -87,6 +89,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpGet]
         public IActionResult AddCourseView()
         {
             try
@@ -99,6 +102,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> AddCourse(CourseAddDto courseAddDto)
         {
             try
@@ -139,6 +143,7 @@ namespace WebApplication.Controllers
             return View(ViewPaths.Course.Add);
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditCourseView(Guid courseId)
         {
             try
@@ -169,6 +174,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> EditCourse(CourseEditDto courseEditDto)
         {
             if(courseEditDto == null)
@@ -197,6 +203,7 @@ namespace WebApplication.Controllers
             return View(ViewPaths.Course.Edit, courseEditDto);
         }
 
+        [HttpPost]
         public async Task<IActionResult> DeleteCourse(Guid courseId)
         {
             if(courseId == Guid.Empty)

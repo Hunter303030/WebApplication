@@ -35,6 +35,7 @@ namespace WebApplication.Controllers
             return View(viewPath);
         }
 
+        [HttpGet]
         public async Task<IActionResult> ListLessonView(Guid courseId)
         {
             if (courseId == Guid.Empty)
@@ -86,6 +87,6 @@ namespace WebApplication.Controllers
                 _notificationService.Message("Ошибка добавления урока!", NotificationService.MessageType.Error);
             }
             return RedirectToAction("ListLessonView", "Lesson", new { courseId = lessonAddDto.CourseId });
-        }
+        }        
     }
 }

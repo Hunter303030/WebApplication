@@ -41,6 +41,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult AuthView()
         {
             try
@@ -54,6 +55,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Auth(ProfileAuthDto profileAuthDto)
         {
             if (profileAuthDto == null)
@@ -79,6 +81,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _profileCookiesService.SignOutAsync();
@@ -87,6 +90,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
+        [HttpGet]
         public IActionResult RegisterView()
         {
             try
@@ -100,6 +104,7 @@ namespace WebApplication.Controllers
         }
 
         [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> Register(ProfileRegisterDto profileRegisterDto)
         {
             if (profileRegisterDto == null)
@@ -127,6 +132,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> EditView()
         {
             try
@@ -155,6 +161,7 @@ namespace WebApplication.Controllers
             }
         }
 
+        [HttpPost]
         public async Task<IActionResult> Edit(ProfileEditDto profileEditDto)
         {
             if (profileEditDto == null)
@@ -188,11 +195,13 @@ namespace WebApplication.Controllers
             return View(ViewPaths.Profile.Edit, profileEditDto);
         }
 
+        [HttpGet]
         public IActionResult EditPasswordView()
         {
             return View(ViewPaths.Profile.EditPassword);
         }
 
+        [HttpPost]
         public async Task<IActionResult> EditPassword(ProfileEditPasswordDto profileEditPasswordDto)
         {
             if (profileEditPasswordDto == null)

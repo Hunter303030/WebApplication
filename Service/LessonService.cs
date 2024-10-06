@@ -8,14 +8,17 @@ namespace WebApplication.Service
     public class LessonService: ILessonService
     {
         private readonly ILessonRepository _lessonRepository;
+        private readonly ICourseRepository _courseRepository;
         private readonly IWebHostEnvironment _appEnvironment;
         private readonly AutoMapper.IMapper _mapper;
 
         public LessonService(ILessonRepository lessonRepository,
+                             ICourseRepository courseRepository,
                              IWebHostEnvironment appEnvironment,
                              AutoMapper.IMapper mapper)
         {
             _lessonRepository = lessonRepository;
+            _courseRepository = courseRepository;
             _appEnvironment = appEnvironment;
             _mapper = mapper;
         }
@@ -47,6 +50,8 @@ namespace WebApplication.Service
 
             string filePath = Path.Combine(folderPath, fileName);
 
+            lessonAddDto.Number++;
+
             Lesson newLesson = new Lesson()
             {
                 Id = lessonId,
@@ -63,6 +68,8 @@ namespace WebApplication.Service
                 {
                     await lessonAddDto.Content.CopyToAsync(fileStream);
                 }
+
+                await _courseRepository.UpdataTime(lessonAddDto.CourseId);
             }
 
             return isAdd;

@@ -45,7 +45,7 @@
                                         Последнее обновление: @item.DateUpdata
                                     </p>
                                     <span id="course-status" class="course-status " data-status="@item.StatusModeration.Title">Статус: @item.StatusModeration.Title</span>
-                                    <form method="post">
+                                    <form method="get">
                                         <input type="hidden" name="courseId" asp-for="@item.Id" />
                                         <div class="button-container">
                                             <input asp-action="EditCourseView" asp-controller="Course" type="submit" class="edit-course-button" value="Редактировать">

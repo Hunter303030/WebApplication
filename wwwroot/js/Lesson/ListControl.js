@@ -24,45 +24,49 @@ let lessonCount = 0;
 
 function addNewLessonForm() {
     const lessonList = document.getElementById('lesson-List');
+    const countLesson = document.getElementById('lesson-Count');
     const courseId = lessonList.getAttribute('data-course-id');
+    const count = countLesson.getAttribute('data-lesson-count');
+
     if (lessonList) {
         lessonCount++;
         if (lessonCount == 1) {
             const form = ` 
             <div class="form-data" id="lessonForm${lessonCount}">
-            <div class="cont">
-            <form method="post" action="/Lesson/AddLesson"  enctype="multipart/form-data">
-                <label class="title">Создать урок</label>
-                <div class="input-box">
-                    <span class="input-title">Название</span>
-                    <input name="Title" class="input-data" type="text" required />
+                <div class="cont">
+                    <form method="post" action="/Lesson/AddLesson" enctype="multipart/form-data">
+                        <label class="title">Создать урок</label>
+                        <div class="input-box">
+                            <span class="input-title">Название</span>
+                            <input name="Title" class="input-data" type="text" required />
+                        </div>
+                        <div class="input-box">
+                            <span class="input-title textarea-title">Описание</span>
+                            <textarea name="Description" class="input-data-textarea" required></textarea>
+                        </div>
+
+                        <div id="progressContainer${lessonCount}" class="progress-container" style="display:none;">
+                            <progress id="progressBar${lessonCount}" value="0" max="100"></progress>
+                            <span id="progressText${lessonCount}">0%</span>
+                        </div>            
+
+                        <div class="input-box">
+                            <label for="fileInput${lessonCount}" class="custom-file-upload">Выберите видео</label>
+                            <input name="Content" type="file" id="fileInput${lessonCount}" class="file-input" accept="video/*" onchange="handleVideoUpload(${lessonCount})" required>
+                            <label id="file-name${lessonCount}">Файл не выбран</label>
+                        </div>
+
+                        <video id="lessonVideo${lessonCount}" controls="controls" class="lesson-video" style="display:none;">
+                            <source id="videoSource${lessonCount}" src="" type="video/mp4" />
+                        </video>
+
+                        <input type="hidden" name="CourseId" value="${courseId}" />
+                        <input type="hidden" name="Number" value="${count}" />
+                        <input type="submit" class="btn" value="Добавить урок"/>
+                        <button type="button" class="btn" onclick="deleteLessonForm(${lessonCount})">Удалить форму</button>
+                    </form>
                 </div>
-                <div class="input-box">
-                    <span class="input-title textarea-title">Описание</span>
-                    <textarea name="Description" class="input-data-textarea" required></textarea>
-                </div>
-
-                <div id="progressContainer${lessonCount}" class="progress-container" style="display:none;">
-                    <progress id="progressBar${lessonCount}" value="0" max="100"></progress>
-                    <span id="progressText${lessonCount}">0%</span>
-                </div>            
-
-                <div class="input-box">
-                    <label for="fileInput${lessonCount}" class="custom-file-upload">Выберите видео</label>
-                    <input name="Content" type="file" id="fileInput${lessonCount}" class="file-input" accept="video/*" onchange="handleVideoUpload(${lessonCount})" required>
-                    <label id="file-name${lessonCount}">Файл не выбран</label>
-                </div>
-
-                <video id="lessonVideo${lessonCount}" controls="controls" class="lesson-video" style="display:none;">
-                    <source id="videoSource${lessonCount}" src="" type="video/mp4" />
-                </video>
-
-                <input type="hidden" name="CourseId" value="${courseId}" />
-                <input type="submit" class="btn" value="Добавить урок"/>
-                <button type="button" class="btn" onclick="deleteLessonForm(${lessonCount})">Удалить форму</button>
-        </form>
-    </div>
-</div>
+            </div>
             `;
             lessonList.insertAdjacentHTML('beforeend', form);
 

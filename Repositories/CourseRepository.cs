@@ -74,5 +74,19 @@ namespace WebApplication.Repositories
 
             return true;
         }
+
+        public async Task<bool> UpdataTime(Guid courseId)
+        {
+            if (courseId == Guid.Empty) return false;
+
+            var updata = await _context.Course.Where(x => x.Id == courseId).FirstOrDefaultAsync();
+
+            updata.DateUpdata = DateTime.Now;
+
+            _context.Course.Update(updata);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

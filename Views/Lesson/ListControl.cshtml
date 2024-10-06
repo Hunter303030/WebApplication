@@ -12,7 +12,7 @@
     <div class="cont">
         <div class="form-lesson">
             <h1 class="title">Список уроков</h1>
-            <form asp-controller="lesson" method="get">
+            <form asp-controller="Lesson" method="get">
                 <div class="search-cont">
                     <input type="text" id="lessonSearchInput" class="search-lesson" placeholder="Поиск по названию" onkeyup="filterLessons()" />
                 </div>
@@ -34,8 +34,8 @@
                                 <div class="lesson-info">
                                     <h2 class="lesson-title">Название урока: @item.Title</h2>
                                     <p class="lesson-description">Описание урока: @item.Description</p>
-                                    <form method="post">
-                                        <input type="hidden" name="lessonId" asp-for="@item.Id" />
+                                    <form asp-controller="Lesson" method="post">
+                                        <input type="hidden" name="lessonId" asp-for="@item.Id" />                                        
                                         <div class="button-container">
                                             <input asp-action="EditLessonView" asp-controller="Lesson" type="submit" class="lesson-button" value="Редактировать">
                                             <input asp-action="DeleteLesson" type="submit" class="lesson-button" value="Удалить">
@@ -48,6 +48,7 @@
                 </div>
             }
             <div id="lesson-List" data-course-id="@Model.CourseId"></div>
+            <div id="lesson-Count" data-lesson-count="@Model.Lessons.Count()"></div>
             <button class="lesson-add" type="submit" onclick="addNewLessonForm()"><img src="~/Image/icon-plus.png" alt="+" /></button>
 
         </div>

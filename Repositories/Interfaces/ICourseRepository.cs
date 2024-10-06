@@ -1,5 +1,4 @@
-﻿using WebApplication.Dto.Course;
-using WebApplication.Models;
+﻿using WebApplication.Models;
 
 namespace WebApplication.Repositories.Interfaces
 {
@@ -11,5 +10,6 @@ namespace WebApplication.Repositories.Interfaces
         public Task<bool> Edit(Course course);
         public Task<Course> GetCourse(Guid courseId);
         public Task<bool> Delete(Course course);
+        public Task<bool> UpdataTime(Guid courseId);
     }
 }

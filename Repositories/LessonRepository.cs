@@ -18,7 +18,7 @@ namespace WebApplication.Repositories
         {
             if (courseId == Guid.Empty) return null;
 
-            return await _context.Lesson.Where(x => x.CourseId == courseId).ToListAsync();
+            return await _context.Lesson.Where(x => x.CourseId == courseId).OrderBy(x=>x.Number).ToListAsync();
         }
 
         public async Task<bool> Add(Lesson lesson)
