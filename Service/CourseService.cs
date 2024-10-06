@@ -62,8 +62,8 @@ namespace WebApplication.Service
                         DateCreate = DateTime.Now,
                         DateUpdata = DateTime.Now,
                         PreviewUrl = $"/Course/{courseId}/" + fileName,
-                        Status_Id = 1,
-                        Profile_Id = profileId
+                        StatusId = 1,
+                        ProfileId = profileId
                     };
 
                     _mapper.Map(courseAddDto, newCourse);

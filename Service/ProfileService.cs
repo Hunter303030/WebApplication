@@ -58,7 +58,7 @@ namespace WebApplication.Service
                 Id = Guid.NewGuid(),
                 DateCreate = DateTime.Now,
                 ImageUrl = avatars[random.Next(avatars.Length)],                
-                Role_Id = 3
+                RoleId = 3
             };
 
             _mapper.Map(profileRegisterDto, newProfile);

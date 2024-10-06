@@ -8,7 +8,7 @@
     for (var i = 0; i < lessons.length; i++) {
         var lessonTitle = lessons[i].getElementsByClassName('lesson-title')[0];
 
-        if (lessonTitle && lessonPrice && lessonDate) {
+        if (lessonTitle) {
             var titleText = lessonTitle.textContent || lessonTitle.innerText;
 
             if (titleText.toLowerCase().indexOf(filter) > -1) {
@@ -23,7 +23,8 @@
 let lessonCount = 0;
 
 function addNewLessonForm() {
-    const lessonList = document.getElementById('lessonList');
+    const lessonList = document.getElementById('lesson-List');
+    const courseId = lessonList.getAttribute('data-course-id');
     if (lessonList) {
         lessonCount++;
         if (lessonCount == 1) {
@@ -56,6 +57,7 @@ function addNewLessonForm() {
                     <source id="videoSource${lessonCount}" src="" type="video/mp4" />
                 </video>
 
+                <input type="hidden" name="CourseId" value="${courseId}" />
                 <input type="submit" class="btn" value="Добавить урок"/>
                 <button type="button" class="btn" onclick="deleteLessonForm(${lessonCount})">Удалить форму</button>
         </form>

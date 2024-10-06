@@ -27,7 +27,7 @@ namespace WebApplication.Repositories
         {
             if (profileId == Guid.Empty) return null;
 
-            var list = await _context.Course.Include(x=>x.StatusModeration).Where(x=>x.Profile_Id == profileId).ToListAsync();
+            var list = await _context.Course.Include(x=>x.StatusModeration).Where(x=>x.ProfileId == profileId).ToListAsync();
 
             if (list == null) return null;
 

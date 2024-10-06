@@ -33,11 +33,13 @@ namespace WebApplication
 
             builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
             builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+            builder.Services.AddScoped<ILessonRepository, LessonRepository>();
 
             builder.Services.AddScoped<IProfileService, ProfileService>();
             builder.Services.AddScoped<IProfileCookiesService, ProfileCookiesService>();
             builder.Services.AddScoped<IPasswordService, PasswordService>();
             builder.Services.AddScoped<ICourseService, CourseService>();
+            builder.Services.AddScoped<ILessonService, LessonService>();
             builder.Services.AddScoped<INotificationService, NotificationService>();
 
             builder.Services.AddHttpContextAccessor();

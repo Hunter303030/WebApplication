@@ -12,12 +12,15 @@ namespace WebApplication.Controllers
     {
         private readonly ILogger<LessonController> _logger;
         private readonly INotificationService _notificationService;
+        private readonly ILessonService _lessonService;
 
         public LessonController(ILogger<LessonController> logger,
-                                INotificationService notificationService)
+                                INotificationService notificationService,
+                                ILessonService lessonService)
         {
             _logger = logger;
             _notificationService = notificationService;
+            _lessonService = lessonService;
         }
 
         [AllowAnonymous]
@@ -32,15 +35,57 @@ namespace WebApplication.Controllers
             return View(viewPath);
         }
 
-        public IActionResult ListLessonView(Guid courseId)
+        public async Task<IActionResult> ListLessonView(Guid courseId)
         {
-            return View(ViewPaths.Lesson.ListContor);
+            if (courseId == Guid.Empty)
+            {
+                _logger.LogError("Ошибка уникального индификатора курса!");
+                _notificationService.Message("Ошибка уникального индификатора курса!", NotificationService.MessageType.Error);
+                return RedirectToAction("ListControlView", "Course");
+            }
+
+            try
+            {
+                var list = await _lessonService.List(courseId);
+                return View(ViewPaths.Lesson.ListContor, list);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex,"Ошибка вывода списка уроков!");
+                _notificationService.Message("Ошибка вывода списка уроков!", NotificationService.MessageType.Error);
+                return RedirectToAction("ListControlView", "Course");
+            }
         }
 
         [HttpPost]
-        public IActionResult AddLesson(LessonAddDto newLesson)
+        public async Task<IActionResult> AddLesson(LessonAddDto lessonAddDto)
         {
-            return View(ViewPaths.Lesson.ListContor);
+            if(lessonAddDto == null)
+            {
+                _logger.LogError("Ошибка модели урока!");
+                _notificationService.Message("Ошибка модели урока!", NotificationService.MessageType.Error);
+            }
+
+            try
+            {
+                bool isAdd = await _lessonService.Add(lessonAddDto);
+
+                if(isAdd)
+                {
+                    _notificationService.Message("Урок успешно добавлен!", NotificationService.MessageType.Success);
+                    return RedirectToAction("ListLessonView", "Lesson", new { courseId = lessonAddDto.CourseId });
+                }
+
+                _logger.LogError("Ошибка добавления урока!");
+                _notificationService.Message("Ошибка добавления урока!", NotificationService.MessageType.Error);
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex,"Ошибка добавления урока!");
+                _notificationService.Message("Ошибка добавления урока!", NotificationService.MessageType.Error);
+            }
+            return RedirectToAction("ListLessonView", "Lesson", new { courseId = lessonAddDto.CourseId });
         }
     }
 }

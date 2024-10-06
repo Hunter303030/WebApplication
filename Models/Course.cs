@@ -9,10 +9,11 @@
         public DateTime DateCreate { get; set; }
         public DateTime DateUpdata { get; set; }
         public string PreviewUrl { get; set; }
-        public Guid Profile_Id { get; set; }
-        public int Status_Id { get; set; }
+        public Guid ProfileId { get; set; }
+        public int StatusId { get; set; }
 
         public Profile Profile { get; set; }
         public StatusModeration StatusModeration { get; set; }
+        public IEnumerable<Lesson> Lessons { get; set; }
     }
 }

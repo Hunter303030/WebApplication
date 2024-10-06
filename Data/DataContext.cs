@@ -24,17 +24,22 @@ namespace WebApplication.Data
             modelBuilder.Entity<Profile>()
                 .HasOne(p => p.Role)
                 .WithMany(r => r.Profiles)
-                .HasForeignKey(p => p.Role_Id);
+                .HasForeignKey(p => p.RoleId);
 
             modelBuilder.Entity<Course>()
                 .HasOne(x => x.Profile)
                 .WithMany(y => y.Courses)
-                .HasForeignKey(x => x.Profile_Id);
+                .HasForeignKey(x => x.ProfileId);
 
             modelBuilder.Entity<Course>()
                 .HasOne(x => x.StatusModeration)
                 .WithMany(y => y.Courses)
-                .HasForeignKey(x => x.Status_Id);
+                .HasForeignKey(x => x.StatusId);
+
+            modelBuilder.Entity<Lesson>()
+                .HasOne(x => x.Course)
+                .WithMany(y => y.Lessons)
+                .HasForeignKey(x => x.CourseId);
         }
 
     }

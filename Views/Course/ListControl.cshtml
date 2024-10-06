@@ -16,7 +16,7 @@
             <form asp-controller="Course" method="get">
                 <div class="search-cont">
                     <input type="text" id="courseSearchInput" class="search-course" placeholder="Поиск по названию, цене или дате" onkeyup="filterCourses()" />
-                    <input asp-action="AddCourseView" type="submit" class="add-course-button" value="Добавить курс" />
+                    <input asp-action="AddCourseView" type="submit" class="add-course-button" value="Добавить" />
                 </div>
             </form>
 
@@ -33,7 +33,7 @@
                             <div class="course-item">
                                 <form asp-controller="Course" method="post">
                                     <input asp-for=@item.Id type="hidden" name="courseId" />
-                                    <input asp-action="DeleteCourse" type="submit" class="delete-course-button" value="🗑">
+                                    <input asp-action="DeleteCourse" type="submit" class="delete-course-button" value="Удалить">
                                 </form>
                                 <img src="@Url.Content(item.PreviewUrl)" alt="Course Image" class="course-image">
                                 <div class="course-info">
@@ -48,7 +48,7 @@
                                     <form method="post">
                                         <input type="hidden" name="courseId" asp-for="@item.Id" />
                                         <div class="button-container">
-                                            <input asp-action="EditCourseView" asp-controller="Course" type="submit" class="edit-course-button" value="Редактировать курс">
+                                            <input asp-action="EditCourseView" asp-controller="Course" type="submit" class="edit-course-button" value="Редактировать">
                                             <input asp-action="ListLessonView" asp-controller="Lesson" type="submit" class="add-lesson-button" value="Список уроков">
                                         </div>
                                     </form>
